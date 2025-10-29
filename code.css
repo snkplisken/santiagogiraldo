@@ -1,0 +1,97 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+#toggleSidebar {
+    display: none; /* Initially hidden, shown in mobile view via media query */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px; /* Width of the visible part of the button */
+    height: 100vh; /* Full height of the viewport */
+    z-index: 30; /* Make sure it's above the sidebar */
+    background-color: #333; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none; /* Remove any default border */
+    cursor: pointer;
+}
+
+/* Adjusting for when the sidebar is visible */
+.sidebar-visible #toggleSidebar {
+    left: calc(80% - 20px); /* Adjust based on the sidebar width */
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20%;
+    height: 100vh;
+    background-color: #cbcbcb; /* Or any color you want */
+    overflow-y: auto;
+    box-sizing: border-box;
+    border-right: 1px solid black; /* The main right border */
+    transition: transform 0.2s ease; /* Smooth transition for toggling */
+    z-index: 10; /* Ensures the sidebar is above the pseudo-element */
+}
+
+.sidebarlinks {
+    margin-top: 7rem;
+}
+
+.sidebar a {
+    display: flex;
+    padding: 15px 10px;
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid #000; /* Adds a stroke (border) to the bottom of each link */
+}
+
+.sidebar a:first-child {
+    border-top: 1px solid #000; /* Adds a stroke (border) to the top of the first link */
+}
+
+.sidebar a:hover {
+    background-color: #D2F059;
+}
+
+.project-content {
+    display: none; /* Initially hide all project details */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    height: 100%;
+    overflow-y: auto;
+}
+
+.project-content figure img {
+    width: 100vw; /* Ensures images scale to the width of their container */
+    height: auto; /* Keeps the image aspect ratio intact */
+}
+
+.project-content section {
+    padding: 20px 0; /* Adds vertical spacing for text sections */
+}
+
+/* Show the first project by default */
+#project1 {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80%; /* Adjust width for mobile */
+        transform: translateX(-100%); /* Hide sidebar off-screen */
+    }
+
+    #toggleSidebar {
+        display: block; /* Show toggle button on mobile */
+    }
+
+    .project-content {
+        margin-left: 0; /* Remove the margin for mobile */
+        width: 100%; /* Use the full width */
+        padding: 30px; /* Optionally adjust padding for mobile, if desired */
+    }
+}

@@ -1,0 +1,304 @@
+
+body, html {
+  cursor: url('Images/Cursor.svg'), auto;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-image: url('Background.png'); /* Path to your image */
+  background-color: #000000;
+  background-size: cover; /* Cover the entire viewport */
+  background-position: center; /* Center the image in the viewport */
+  background-repeat: no-repeat; /* Do not repeat the image */    color: #000000;
+  overflow-x: hidden;
+}
+
+canvas { 
+  display: block; 
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  left: 10px;
+  top: 10px;
+  background: transparent;
+  z-index: 1000;
+}
+
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  width: 150px; /* Default size */
+  height: auto;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+nav li {
+  display: inline;
+  margin-right: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #D2F059;
+  transition: color 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #aaa;
+}
+
+
+footer {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  margin-left: 10px; /* Adds 10px margin on the left */
+  margin-right: 10px; /* Adds 10px margin on the right */
+  background: #D2F059; /* Set background to transparent */
+  overflow: hidden;
+  height: 20px; /* Adjust height as needed */
+  border-top: 2px solid #D2F059; /* 1px top stroke, change color as needed */
+  border-bottom: 2px solid #D2F059; /* 1px bottom stroke, change color as needed */
+  border-left: 2px solid #D2F059;
+  border-right: 2px solid #D2F059;
+  border-radius: 10px; /* Rounded corners, adjust radius as needed */
+  z-index: index 1001; ;
+}
+
+#footerCloseButton {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 10spx;
+  background-color: #D2F059;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+#footerCloseButton:hover {
+  background-color: #adc649; /* New background color on hover */
+  /* You can also change other properties like color, border, etc., if needed */
+}
+.footer-content {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px 10px; /* Reduced vertical padding */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center; /* Align text vertically in the center */
+  height: 100%; /* Fill the parent's height */
+}
+
+.footer-text {
+  display: inline-block;
+  line-height: 1.5; /* Ensure line-height is enough to prevent cutting off text */
+  position: relative;
+  padding-left: 4px;
+}
+
+.footer-clock {
+  background-color: #D2F059; /* Ensures matching background color */
+  position: absolute;
+  left: 0; /* Align all the way to the left edge of the footer */
+  border: none;
+  border-radius: 0 10px 0px 0; /* Rounded corners on the right side only */
+  padding: 0 10px; /* Adjust padding as needed */
+  z-index: 1002; /* Ensure it's above the scrolling text */
+  color: black; /* Text color */
+  font-family: 'Inter', sans-serif; /* Match font style */
+  height: 20px; /* Match the height of the footer */
+  line-height: 20px; /* Center the text vertically */
+  width: auto; /* Adjust width as necessary */
+}
+
+.hamburger-menu {
+  display: none;
+  cursor: pointer;
+  padding: 20px;
+}
+
+.line {
+  width: 30px;
+  height: 3px;
+  background-color: white;
+  margin: 5px 0;
+}
+
+.horizontal-gallery {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+  z-index: 1; /* Lower than the header */
+}
+
+.gallery-image {
+  margin: 0;
+  padding: 0;
+  flex: 0 0 auto; /* Adjust flex-basis to auto */
+  height: 100vh; /* Full viewport height */
+  overflow: hidden;
+  box-sizing: border-box; /* Ensure padding doesn't add to total width/height */
+  display: flex;
+  justify-content: center; /* Center images horizontally */
+  align-items: center; /* Center images vertically */
+}
+
+.gallery-image img {
+  max-height: 100%; /* Max height to viewport height */
+  width: auto; /* Auto width to maintain aspect ratio */
+  object-fit: cover; /* Ensure image is fully visible */
+}
+
+.portfolio-menu {
+  margin-top: 100px;
+  float: left;
+  width: 33.33%;
+  height: 100vh; /* Full viewport height */
+  background: #cbcbcb; /* Gray background */
+  overflow-y: auto; /* Enable vertical scrolling if needed */
+  position: fixed;
+  border-top-right-radius: 10px; /* 10px border radius on the top-right corner */
+  border-bottom-right-radius: 10px; /* 10px border radius on the bottom-right corner */
+  /* Add additional styling based on your preference */
+}
+
+.portfolio-tab {
+  height: 100vh;
+  background-color: red;
+}
+
+.portfolio-menu a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+  border-bottom: 1px solid #000000; /* This adds a stroke at the bottom of each link */
+}
+
+.portfolio-menu a:last-child {
+  border-bottom: none; /* This removes the stroke from the last link */
+}
+
+.portfolio-menu a:hover {
+  background: #D2F059;
+  /* Adjust hover effect as desired */
+}
+
+.portfolio-gallery {
+  margin-left: 33.33%; /* Offset by the width of the menu */
+  width: 66.66%;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  background: #fff; /* Change as needed */
+  /* Add additional styling based on your preference */
+}
+
+.portfolio-gallery img {
+  width: 100%;
+  display: block;
+  /* Adjust image styling as needed */
+}
+
+.portfolio-menu a.active {
+  background-color: #D2F059; /* Active link background color */
+  color: #000000; /* Active link text color */
+}
+
+@media (max-width: 768px) { /* Example for tablets */
+  .logo img {
+    width: 120px; /* Smaller size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) { /* Example for mobile phones */
+  .logo img {
+    width: 100px; /* Even smaller size for mobile screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .hamburger-menu {
+    display: block;
+    position: fixed;
+    top: 10px;
+    right: 0px;
+    z-index: 1001;
+  }
+
+  nav ul {
+    position: fixed;
+    top: 100vh; /* Start off-screen */
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background: #D2F059; /* Solid green background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 60px;
+    transition: top 0.5s ease;
+}
+
+
+nav ul.open {
+    top: 0; /* Bring into view */
+}
+
+
+  nav ul.open {
+    display: flex;
+  }
+
+  nav li {
+    display: block;
+  }
+
+  nav a {
+    color: #fff;
+    padding: 10px 20px;
+    display: block;
+  }
+
+  .draggable-image {
+    cursor: move;
+}
+
+/* For smaller screens */
+@media (max-width: 600px) {
+  .slide {
+      padding: 10px;
+      font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio-menu {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .portfolio-gallery {
+    margin-left: 0;
+    width: 100%;
+  }}
+
+}

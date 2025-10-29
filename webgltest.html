@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        canvas {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="glCanvas"></canvas>
+
+    <script id="vertexShader" type="x-shader/x-vertex">
+        attribute vec4 aVertexPosition;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        void main() {
+            gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+        }
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-fragment">
+        precision highp float;
+        uniform float uTime;
+        uniform vec2 uResolution;
+        
+        void main() {
+            vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution.xy) / min(uResolution.y, uResolution.x);
+            
+            float time = uTime * 0.5;
+            
+            // Create flowing bands
+            float bands = sin(uv.x * 10.0 + time * 2.0) * cos(uv.y * 5.0 + time) * 2.0;
+            
+            // Create rotating color effect
+            vec3 color = 0.5 + 0.5 * cos(time + uv.xyx + vec3(0, 2, 4));
+            
+            // Create pulsing core
+            float pulse = sin(time * 3.0) * 0.5 + 0.5;
+            float dist = length(uv);
+            float glow = smoothstep(0.5, 0.0, dist) * pulse;
+            
+            // Combine effects
+            vec3 finalColor = mix(color * (bands + 0.5), vec3(1.0), glow);
+            
+            gl_FragColor = vec4(finalColor, 1.0);
+        }
+    </script>
+
+    <script>
+        let gl, program, buffer;
+        let timeLocation, resolutionLocation;
+        let rotation = 0;
+
+        function initGL() {
+            const canvas = document.getElementById('glCanvas');
+            gl = canvas.getContext('webgl');
+
+            if (!gl) {
+                alert('WebGL not supported');
+                return;
+            }
+
+            // Create shaders
+            const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(vertexShader, document.getElementById('vertexShader').text);
+            gl.compileShader(vertexShader);
+
+            const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fragmentShader, document.getElementById('fragmentShader').text);
+            gl.compileShader(fragmentShader);
+
+            // Create program
+            program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                alert('Shader program failed to link');
+                return;
+            }
+
+            // Create vertex buffer
+            const positions = [
+                -1, -1,
+                1, -1,
+                -1, 1,
+                1, 1,
+            ];
+
+            buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+            // Get uniform locations
+            timeLocation = gl.getUniformLocation(program, 'uTime');
+            resolutionLocation = gl.getUniformLocation(program, 'uResolution');
+
+            // Set viewport
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        }
+
+        function render(time) {
+            if (!gl) return;
+
+            time *= 0.001; // Convert to seconds
+
+            gl.useProgram(program);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+            const positionLocation = gl.getAttribLocation(program, 'aVertexPosition');
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            // Update uniforms
+            gl.uniform1f(timeLocation, time);
+            gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+
+            // Draw
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            requestAnimationFrame(render);
+        }
+
+        function resize() {
+            const canvas = document.getElementById('glCanvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (gl) {
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        window.addEventListener('resize', resize);
+        initGL();
+        resize();
+        requestAnimationFrame(render);
+    </script>
+</body>
+</html>

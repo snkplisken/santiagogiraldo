@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design</title>
+<link rel="stylesheet" href="styles.css"> <!-- Link to your external CSS file -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200&display=swap');
+    body.design-page-background {
+            background-image: url('new-background.jpg'); /* Replace with your new background image */
+            background-color: #cbcbcb; /* Or any other color you wish */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+  </style>
+  
+</head>
+<body class="design-page-background">
+    <header>
+        <div class="hamburger-menu">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="Design.html">DESIGN</a></li>
+            <li><a href="Portfolio_3D.html">3D</a></li>
+            <li><a href="Photography.html">PHOTOGRAPHY</a></li>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a href="shop.html">SHOP</a></li>
+          </ul>
+        </nav>
+        <div class="logo">
+          <a href="index.html" target="_blank">
+              <img src="Logo2.svg" alt="Logo" />
+          </a>
+      </div>
+      </header>
+<div class="portfolio-menu">
+  <!-- Use data-target attribute to specify the ID of the gallery to show -->
+  <a href="javascript:void(0);" data-target="project1">NIGHTMRKT TECH</a>
+  <a href="javascript:void(0);" data-target="project2">DIAGRAMS</a>
+  <a href="javascript:void(0);" data-target="project3">EASYTECH</a>
+  <a href="javascript:void(0);" data-target="project4">SPLUNK INC</a>
+  <a href="javascript:void(0);" data-target="project5">SELECT INSTITUTE OF TECHNOLOGY</a>
+  <!-- Add more links as needed -->
+</div>
+
+<!-- Portfolio galleries -->
+<div id="project1" class="portfolio-gallery">
+  <!-- Add your project images here -->
+  <img src="Images/Emmapoly.jpeg" alt="Project 1 Image 1">
+  <!-- Add more images as needed -->
+</div>
+
+<div id="project2" class="portfolio-gallery" style="display:none;">
+  <!-- Add your project images here -->
+  <img src="Images/Kris&Sean.JPG" alt="Project 2 Image 1">
+  <!-- Add more images as needed -->
+</div>
+
+<div id="project3" class="portfolio-gallery" style="display:none;">
+  <!-- Add your project images here -->
+  <img src="Images/Halloween2020.jpg" alt="Project 3 Image 1">
+  <!-- Add more images as needed -->
+</div>
+<div id="project3" class="portfolio-gallery" style="display:none;">
+    <!-- Add your project images here -->
+    <img src="Images/Loveuslikewedo.jpg" alt="Project 3 Image 1">
+    <!-- Add more images as needed -->
+</div>
+<div id="project4" class="portfolio-gallery" style="display:none;">
+    <!-- Add your project images here -->
+    <img src="Images/Snotte_Brige2.JPG" alt="Project 4 Image 1">
+    <!-- Add more images as needed -->
+</div>
+<div id="project5" class="portfolio-gallery" style="display:none;">
+    <!-- Add your project images here -->
+    <img src="Images/Codor.jpg" alt="Project 5 Image 1">
+    <img src="Images/Codor.jpg" alt="Project 5 Image 1">
+    <img src="Images/Codor.jpg" alt="Project 5 Image 1">
+    <img src="Images/Codor.jpg" alt="Project 5 Image 1">
+
+    <!-- Add more images as needed -->
+</div>
+<footer>
+  <div class="footer-content">
+    <div id="clock" class="footer-clock">00:00:00</div>
+    <div id="scrolling-text" class="footer-text">
+      THIS IS THE DESIGN PAGE LETS HOPE IT WORKS
+    </div>
+  </div>
+  <button id="footerCloseButton">X</button>
+</footer>
+
+<script src="script.js"></script> <!-- Link to your external JS file -->
+</body>
+</html>
+

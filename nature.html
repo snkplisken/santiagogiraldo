@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wild Ruins Nature</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body {
+            background-color: #a7b89b;
+            color: #3e4c3d;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        nav.container-fluid {
+            background: none;
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+        nav ul {
+            padding: 0;
+            list-style-type: none;
+            text-align: center;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+        .card h2 {
+            color: #3e4c3d;
+        }
+        .card p {
+            color: #3e4c3d;
+        }
+        footer.container {
+            background: none;
+            color: #fff;
+            text-align: center;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Maputer</a></li>
+            <li><a href="#">Moyer</a></li>
+            <li><a href="#">Urgaties</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <div class="grid">
+            <section class="card">
+                <h2>Wild Ruins Nature</h2>
+                <img src="https://source.unsplash.com/featured/?apple,nature" alt="Nature Image" />
+                <p>Explore the wonders of nature through our curated selection of wilderness experiences.</p>
+            </section>
+            <section class="card">
+                <h2>Testimonials</h2>
+                <p>Read stories from our community of nature enthusiasts and adventurers.</p>
+            </section>
+            <section class="card">
+                <h2>Betitimes</h2>
+                <p>Learn about the best times to visit natural sites for the optimal experience.</p>
+            </section>
+        </div>
+    </main>
+    <footer class="container">
+        <p>© 2024 Wild Ruins Nature. All rights reserved.</p>
+    </footer>
+</body>
+</html>
