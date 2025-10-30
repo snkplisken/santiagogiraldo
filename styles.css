@@ -144,17 +144,19 @@ footer {
 .horizontal-gallery {
   display: flex;
   height: 100vh; /* Full viewport height */
-  width: 100vw; /* Match the viewport width */
   overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
   scroll-snap-type: x mandatory; /* Keep slides flush with each other */
+  scroll-behavior: smooth;
   z-index: 1; /* Lower than the header */
 }
 
 .gallery-image {
   position: relative;
-  flex: 0 0 100vw; /* Each image fills the full viewport width */
-  width: 100vw;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
   height: 100vh; /* Full viewport height */
   margin: 0;
   padding: 0;
@@ -162,9 +164,10 @@ footer {
 }
 
 .gallery-image img {
-  width: 100%;
   height: 100%;
-  object-fit: cover; /* Fill the viewport while keeping aspect ratio */
+  width: auto;
+  flex: 0 0 auto;
+  object-fit: contain; /* Keep aspect ratio while filling the height */
 }
 
 .portfolio-menu {
