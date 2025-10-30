@@ -1,4 +1,8 @@
 
+:root {
+  --viewport-offset-bottom: 0px;
+}
+
 body, html {
   cursor: url('Images/Cursor.svg'), auto;
   margin: 0;
@@ -62,27 +66,30 @@ nav a:hover {
 
 footer {
   position: fixed;
-  bottom: 30px;
   left: 0;
   right: 0;
+  bottom: 0;
   margin-left: 10px; /* Adds 10px margin on the left */
   margin-right: 10px; /* Adds 10px margin on the right */
-  background: #D2F059; /* Set background to transparent */
+  margin-bottom: 10px;
+  margin-bottom: calc(var(--viewport-offset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 10px);
+  background-color: #D2F059; /* Set background to transparent */
   overflow: hidden;
-  height: 20px; /* Adjust height as needed */
+  min-height: 20px; /* Adjust height as needed */
   border-top: 2px solid #D2F059; /* 1px top stroke, change color as needed */
   border-bottom: 2px solid #D2F059; /* 1px bottom stroke, change color as needed */
   border-left: 2px solid #D2F059;
   border-right: 2px solid #D2F059;
   border-radius: 10px; /* Rounded corners, adjust radius as needed */
-  z-index: index 1001; ;
+  z-index: 1001;
+  box-sizing: border-box;
 }
 
 #footerCloseButton {
   position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 10spx;
+  top: 0;
+  right: 0;
+  bottom: 0;
   background-color: #D2F059;
   color: black;
   border: none;
@@ -104,6 +111,7 @@ footer {
   display: flex;
   align-items: center; /* Align text vertically in the center */
   height: 100%; /* Fill the parent's height */
+  margin-right: 35px; /* Ensure text doesn't sit under the close button */
 }
 
 .footer-text {

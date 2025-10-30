@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const rootElement = document.documentElement;
+
+    const updateViewportOffset = () => {
+        if (!window.visualViewport) {
+            rootElement.style.removeProperty('--viewport-offset-bottom');
+            return;
+        }
+
+        const viewport = window.visualViewport;
+        const viewportBottomSpace = Math.max(0, window.innerHeight - (viewport.height + viewport.offsetTop));
+        rootElement.style.setProperty('--viewport-offset-bottom', `${viewportBottomSpace}px`);
+    };
+
+    updateViewportOffset();
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', updateViewportOffset);
+        window.visualViewport.addEventListener('scroll', updateViewportOffset);
+    }
+
+    window.addEventListener('resize', updateViewportOffset);
+
     // Clock functionality
     function updateClock() {
         const now = new Date();
