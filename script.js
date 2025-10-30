@@ -147,7 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         gallery.addEventListener('pointerdown', (event) => {
-            if (event.button !== undefined && event.button !== 0) {
+            const isPrimaryButton = event.button === undefined || event.button === 0;
+            const pointerType = event.pointerType;
+            const isMousePointer = !pointerType || pointerType === 'mouse';
+
+            if (!isPrimaryButton || !isMousePointer) {
                 return;
             }
 
@@ -171,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (!window.PointerEvent) {
+            const hasTouchSupport = 'ontouchstart' in window || (navigator.maxTouchPoints || 0) > 0;
             let isMouseDragging = false;
 
             const mouseMoveHandler = (event) => {
@@ -192,6 +197,9 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             gallery.addEventListener('mousedown', (event) => {
+                if (hasTouchSupport) {
+                    return;
+                }
                 if (event.button !== 0) {
                     return;
                 }
