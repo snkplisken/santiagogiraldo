@@ -80,8 +80,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const gallery = document.querySelector('.horizontal-gallery');
     if (gallery) {
         gallery.addEventListener('wheel', (event) => {
-            event.preventDefault();
-            gallery.scrollLeft += event.deltaY;
+            const dominantDelta = Math.abs(event.deltaY) > Math.abs(event.deltaX)
+                ? event.deltaY
+                : event.deltaX;
+
+            if (dominantDelta !== 0) {
+                event.preventDefault();
+                gallery.scrollLeft += dominantDelta;
+            }
         });
 
         document.addEventListener('keydown', (event) => {
