@@ -150,6 +150,13 @@ footer {
   scroll-snap-type: x mandatory; /* Keep slides flush with each other */
   scroll-behavior: smooth;
   z-index: 1; /* Lower than the header */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.horizontal-gallery.is-dragging {
+  cursor: grabbing;
 }
 
 .gallery-image {

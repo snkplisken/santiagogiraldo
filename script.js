@@ -88,7 +88,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 event.preventDefault();
                 gallery.scrollLeft += dominantDelta;
             }
+        }, { passive: false });
+
+        let isPointerDown = false;
+        let pointerStartX = 0;
+        let scrollStartLeft = 0;
+
+        const stopDragging = (event) => {
+            if (!isPointerDown) return;
+            isPointerDown = false;
+            gallery.classList.remove('is-dragging');
+            if (event && event.pointerId !== undefined && gallery.releasePointerCapture) {
+                gallery.releasePointerCapture(event.pointerId);
+            }
+        };
+
+        gallery.addEventListener('pointerdown', (event) => {
+            if (event.button !== undefined && event.button !== 0) {
+                return;
+            }
+
+            const pointerType = event.pointerType;
+            if (pointerType && pointerType !== 'mouse' && pointerType !== 'pen') {
+                return;
+            }
+
+            isPointerDown = true;
+            pointerStartX = event.clientX;
+            scrollStartLeft = gallery.scrollLeft;
+            gallery.classList.add('is-dragging');
+
+            if (gallery.setPointerCapture && event.pointerId !== undefined) {
+                gallery.setPointerCapture(event.pointerId);
+            }
         });
+
+        gallery.addEventListener('pointermove', (event) => {
+            if (!isPointerDown) {
+                return;
+            }
+
+            event.preventDefault();
+            const deltaX = event.clientX - pointerStartX;
+            gallery.scrollLeft = scrollStartLeft - deltaX;
+        });
+
+        gallery.addEventListener('pointerup', stopDragging);
+        gallery.addEventListener('pointerleave', stopDragging);
+        gallery.addEventListener('pointercancel', stopDragging);
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowRight') {
