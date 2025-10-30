@@ -8,6 +8,27 @@ canvas.style.width = "100%";
 canvas.style.height = "100vh";
 canvas.style.userSelect = "none";
 
+const detectFinePointer = () => {
+  if (typeof window === "undefined") {
+    return true;
+  }
+
+  if (typeof window.matchMedia === "function") {
+    if (window.matchMedia("(pointer: fine)").matches) {
+      return true;
+    }
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      return false;
+    }
+  }
+
+  return !("ontouchstart" in window);
+};
+
+const allowPointerControls = detectFinePointer();
+
+canvas.style.touchAction = allowPointerControls ? "manipulation" : "none";
+
 const dpr = Math.max(1, 0.5 * window.devicePixelRatio);
 
 function resize() {
@@ -220,16 +241,63 @@ function loop(now) {
   requestAnimationFrame(loop)
 }
 
+const shouldHandlePointerEvent = (event) => {
+  if (!allowPointerControls) {
+    return false;
+  }
+
+  if (!event.pointerType) {
+    return true;
+  }
+
+  return event.pointerType === "mouse" || event.pointerType === "pen";
+};
+
+const handlePointerDown = (event) => {
+  if (!shouldHandlePointerEvent(event)) {
+    return;
+  }
+
+  mouse.update(event.clientX, event.clientY, event.pointerId);
+};
+
+const handlePointerMove = (event) => {
+  if (!shouldHandlePointerEvent(event)) {
+    return;
+  }
+
+  if (mouse.touches.has(event.pointerId)) {
+    mouse.update(event.clientX, event.clientY, event.pointerId);
+  }
+};
+
+const handlePointerEnd = (event) => {
+  if (!allowPointerControls) {
+    return;
+  }
+
+  mouse.remove(event.pointerId);
+};
+
 setup()
 init()
 resize()
 loop(0)
 
-window.addEventListener("pointerdown", e => mouse.update(e.clientX, e.clientY, e.pointerId))
-window.addEventListener("pointerup", e => mouse.remove(e.pointerId))
-window.addEventListener("pointermove", e => {
-  if (mouse.touches.has(e.pointerId))
-    mouse.update(e.clientX, e.clientY, e.pointerId)
+if (allowPointerControls) {
+  window.addEventListener("pointerdown", handlePointerDown)
+  window.addEventListener("pointermove", handlePointerMove)
+  window.addEventListener("pointerup", handlePointerEnd)
+  window.addEventListener("pointercancel", handlePointerEnd)
+  window.addEventListener("pointerleave", handlePointerEnd)
+} else {
+  const preventTouchScroll = (event) => {
+    if (event.cancelable) {
+      event.preventDefault()
+    }
+  }
 
-
-})
+  ;["touchstart", "touchmove", "touchend", "touchcancel"].forEach(type => {
+    canvas.addEventListener(type, preventTouchScroll, { passive: false })
+  })
+}
