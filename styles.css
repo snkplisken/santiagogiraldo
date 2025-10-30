@@ -153,6 +153,7 @@ footer {
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: pan-y;
 }
 
 .horizontal-gallery.is-dragging {
@@ -175,6 +176,7 @@ footer {
   width: auto;
   flex: 0 0 auto;
   object-fit: contain; /* Keep aspect ratio while filling the height */
+  -webkit-user-drag: none;
 }
 
 .portfolio-menu {
