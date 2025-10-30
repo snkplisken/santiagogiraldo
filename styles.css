@@ -152,7 +152,8 @@ footer {
 .gallery-image {
   margin: 0;
   padding: 0;
-  flex: 0 0 auto; /* Adjust flex-basis to auto */
+  flex: 0 0 100vw; /* Each image fills the full viewport width */
+  width: 100vw;
   height: 100vh; /* Full viewport height */
   overflow: hidden;
   box-sizing: border-box; /* Ensure padding doesn't add to total width/height */
@@ -162,9 +163,9 @@ footer {
 }
 
 .gallery-image img {
-  max-height: 100%; /* Max height to viewport height */
-  width: auto; /* Auto width to maintain aspect ratio */
-  object-fit: cover; /* Ensure image is fully visible */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure image covers the viewport area */
 }
 
 .portfolio-menu {
