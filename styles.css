@@ -68,14 +68,12 @@ footer {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 30px);
   margin-left: 10px; /* Adds 10px margin on the left */
   margin-right: 10px; /* Adds 10px margin on the right */
-  margin-bottom: 10px;
-  margin-bottom: calc(var(--viewport-offset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 10px);
-  background-color: #D2F059; /* Set background to transparent */
+  background: #D2F059; /* Match the original footer color */
   overflow: hidden;
-  min-height: 20px; /* Adjust height as needed */
+  height: 20px; /* Match the original footer height */
   border-top: 2px solid #D2F059; /* 1px top stroke, change color as needed */
   border-bottom: 2px solid #D2F059; /* 1px bottom stroke, change color as needed */
   border-left: 2px solid #D2F059;
@@ -89,12 +87,12 @@ footer {
   position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
+  height: 100%;
   background-color: #D2F059;
   color: black;
   border: none;
   border-radius: 5px;
-  padding: 3px 10px;
+  padding: 0 12px;
   cursor: pointer;
 }
 
@@ -106,17 +104,16 @@ footer {
   position: relative;
   overflow: hidden;
   white-space: nowrap;
-  padding: 10px 10px; /* Reduced vertical padding */
+  padding: 0 45px 0 35px;
   box-sizing: border-box;
   display: flex;
   align-items: center; /* Align text vertically in the center */
   height: 100%; /* Fill the parent's height */
-  margin-right: 35px; /* Ensure text doesn't sit under the close button */
 }
 
 .footer-text {
   display: inline-block;
-  line-height: 1.5; /* Ensure line-height is enough to prevent cutting off text */
+  line-height: 20px; /* Match the original compact line-height */
   position: relative;
   padding-left: 4px;
 }
@@ -126,7 +123,7 @@ footer {
   position: absolute;
   left: 0; /* Align all the way to the left edge of the footer */
   border: none;
-  border-radius: 0 10px 0px 0; /* Rounded corners on the right side only */
+  border-radius: 0 10px 0 0; /* Rounded corners on the right side only */
   padding: 0 10px; /* Adjust padding as needed */
   z-index: 1002; /* Ensure it's above the scrolling text */
   color: black; /* Text color */
