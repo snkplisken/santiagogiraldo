@@ -83,6 +83,11 @@ footer {
   box-sizing: border-box;
 }
 
+body.menu-open footer {
+  z-index: 0;
+  pointer-events: none;
+}
+
 #footerCloseButton {
   position: absolute;
   top: 0;
@@ -271,23 +276,22 @@ footer {
 
   nav ul {
     position: fixed;
-    top: 100vh; /* Start off-screen */
-    left: 0;
-    height: 100vh;
-    width: 100vw;
+    inset: 0;
+    transform: translateY(100%);
     background: #D2F059; /* Solid green background */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding-top: 60px;
-    transition: top 0.5s ease;
-    z-index: 2000;
+    transition: transform 0.5s ease;
+    z-index: 3000;
+    pointer-events: none;
   }
 
   nav ul.open {
-    top: 0; /* Bring into view */
-    display: flex;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   nav li {
@@ -300,11 +304,8 @@ footer {
     display: block;
   }
 
-  nav ul.open + .menu-close {
-    display: block;
-  }
-
   .menu-close {
+    display: block;
     position: fixed;
     top: 15px;
     right: 15px;
@@ -312,7 +313,17 @@ footer {
     font-size: 28px;
     line-height: 1;
     color: #000;
-    z-index: 2100;
+    z-index: 3100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    transition-delay: 0s;
+  }
+
+  nav ul.open + .menu-close {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.4s;
   }
 }
 

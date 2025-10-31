@@ -85,22 +85,22 @@
 
     nav ul {
       position: fixed;
-      top: 100vh;
-      left: 0;
-      height: 100vh;
-      width: 100vw;
+      inset: 0;
+      transform: translateY(100%);
       background: #D2F059;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding-top: 60px;
-      transition: top 0.5s ease;
-      z-index: 2000;
+      transition: transform 0.5s ease;
+      z-index: 3000;
+      pointer-events: none;
     }
 
     nav ul.open {
-      top: 0;
+      transform: translateY(0);
+      pointer-events: auto;
     }
 
     nav li {
@@ -113,11 +113,8 @@
       font-weight: bold;
     }
 
-    nav ul.open + .menu-close {
-      display: block;
-    }
-
     .menu-close {
+      display: block;
       position: fixed;
       top: 15px;
       right: 15px;
@@ -125,7 +122,17 @@
       font-size: 28px;
       line-height: 1;
       color: #000;
-      z-index: 2100;
+      z-index: 3100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      transition-delay: 0s;
+    }
+
+    nav ul.open + .menu-close {
+      opacity: 1;
+      pointer-events: auto;
+      transition-delay: 0.4s;
     }
   }
   

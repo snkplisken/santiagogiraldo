@@ -82,19 +82,46 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Hamburger Menu Functionality
+    const bodyElement = document.body;
+    if (bodyElement) {
+        bodyElement.classList.remove('menu-open');
+    }
+
     const hamburgerMenu = document.querySelector('.hamburger-menu');
     const navUl = document.querySelector('nav ul');
     const closeMenuButton = document.querySelector('.menu-close');
 
+    const applyMenuState = (isOpen) => {
+        if (!navUl) {
+            return;
+        }
+
+        if (isOpen) {
+            navUl.classList.add('open');
+        } else {
+            navUl.classList.remove('open');
+        }
+
+        if (bodyElement) {
+            bodyElement.classList.toggle('menu-open', isOpen);
+        }
+    };
+
     if (hamburgerMenu && navUl) {
         hamburgerMenu.addEventListener('click', function() {
-            navUl.classList.toggle('open');
+            applyMenuState(!navUl.classList.contains('open'));
         });
     }
 
     if (closeMenuButton && navUl) {
         closeMenuButton.addEventListener('click', function() {
-            navUl.classList.remove('open');
+            applyMenuState(false);
+        });
+    }
+
+    if (navUl) {
+        navUl.querySelectorAll('a').forEach((navLink) => {
+            navLink.addEventListener('click', () => applyMenuState(false));
         });
     }
 
