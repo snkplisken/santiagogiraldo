@@ -14,10 +14,25 @@ const detectFinePointer = () => {
   }
 
   if (typeof window.matchMedia === "function") {
-    if (window.matchMedia("(pointer: fine)").matches) {
+    const finePointer = window.matchMedia("(pointer: fine)");
+    if (finePointer.matches) {
       return true;
     }
-    if (window.matchMedia("(pointer: coarse)").matches) {
+
+    const hoverPointer = window.matchMedia("(hover: hover)");
+    if (hoverPointer.matches) {
+      return true;
+    }
+
+    const coarsePointer = window.matchMedia("(pointer: coarse)");
+    if (coarsePointer.matches) {
+      return false;
+    }
+  }
+
+  if (typeof navigator !== "undefined") {
+    const touchPoints = navigator.maxTouchPoints || navigator.msMaxTouchPoints || 0;
+    if (touchPoints > 0) {
       return false;
     }
   }
@@ -257,6 +272,10 @@ if (allowPointerControls && hasPointerEvents) {
     }
 
     if (event.button !== undefined && event.button !== 0) {
+      return;
+    }
+
+    if (event.pointerType && event.pointerType !== "mouse" && event.pointerType !== "pen") {
       return;
     }
 
