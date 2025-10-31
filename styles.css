@@ -1,4 +1,8 @@
 
+:root {
+  --viewport-offset-bottom: 0px;
+}
+
 body, html {
   cursor: url('Images/Cursor.svg'), auto;
   margin: 0;
@@ -62,32 +66,38 @@ nav a:hover {
 
 footer {
   position: fixed;
-  bottom: 30px;
   left: 0;
   right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 30px);
   margin-left: 10px; /* Adds 10px margin on the left */
   margin-right: 10px; /* Adds 10px margin on the right */
-  background: #D2F059; /* Set background to transparent */
+  background: #D2F059; /* Match the original footer color */
   overflow: hidden;
-  height: 20px; /* Adjust height as needed */
+  height: 20px; /* Match the original footer height */
   border-top: 2px solid #D2F059; /* 1px top stroke, change color as needed */
   border-bottom: 2px solid #D2F059; /* 1px bottom stroke, change color as needed */
   border-left: 2px solid #D2F059;
   border-right: 2px solid #D2F059;
   border-radius: 10px; /* Rounded corners, adjust radius as needed */
-  z-index: index 1001; ;
+  z-index: 1001;
+  box-sizing: border-box;
+}
+
+body.menu-open footer {
+  z-index: 0;
+  pointer-events: none;
 }
 
 #footerCloseButton {
   position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 10spx;
+  top: 0;
+  right: 0;
+  height: 100%;
   background-color: #D2F059;
   color: black;
   border: none;
   border-radius: 5px;
-  padding: 3px 10px;
+  padding: 0 12px;
   cursor: pointer;
 }
 
@@ -99,7 +109,7 @@ footer {
   position: relative;
   overflow: hidden;
   white-space: nowrap;
-  padding: 10px 10px; /* Reduced vertical padding */
+  padding: 0 45px 0 35px;
   box-sizing: border-box;
   display: flex;
   align-items: center; /* Align text vertically in the center */
@@ -108,7 +118,7 @@ footer {
 
 .footer-text {
   display: inline-block;
-  line-height: 1.5; /* Ensure line-height is enough to prevent cutting off text */
+  line-height: 20px; /* Match the original compact line-height */
   position: relative;
   padding-left: 4px;
 }
@@ -118,7 +128,7 @@ footer {
   position: absolute;
   left: 0; /* Align all the way to the left edge of the footer */
   border: none;
-  border-radius: 0 10px 0px 0; /* Rounded corners on the right side only */
+  border-radius: 0 10px 0 0; /* Rounded corners on the right side only */
   padding: 0 10px; /* Adjust padding as needed */
   z-index: 1002; /* Ensure it's above the scrolling text */
   color: black; /* Text color */
@@ -141,30 +151,51 @@ footer {
   margin: 5px 0;
 }
 
+.menu-close {
+  display: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
 .horizontal-gallery {
   display: flex;
   height: 100vh; /* Full viewport height */
   overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+  scroll-snap-type: x mandatory; /* Keep slides flush with each other */
+  scroll-behavior: smooth;
   z-index: 1; /* Lower than the header */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-x; /* Allow native horizontal panning on touch devices */
+}
+
+.horizontal-gallery.is-dragging {
+  cursor: grabbing;
 }
 
 .gallery-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 100vh; /* Full viewport height */
   margin: 0;
   padding: 0;
-  flex: 0 0 auto; /* Adjust flex-basis to auto */
-  height: 100vh; /* Full viewport height */
-  overflow: hidden;
-  box-sizing: border-box; /* Ensure padding doesn't add to total width/height */
-  display: flex;
-  justify-content: center; /* Center images horizontally */
-  align-items: center; /* Center images vertically */
+  scroll-snap-align: start; /* Snap each slide to the viewport */
 }
 
 .gallery-image img {
-  max-height: 100%; /* Max height to viewport height */
-  width: auto; /* Auto width to maintain aspect ratio */
-  object-fit: cover; /* Ensure image is fully visible */
+  height: 100%;
+  width: auto;
+  flex: 0 0 auto;
+  object-fit: contain; /* Keep aspect ratio while filling the height */
+  -webkit-user-drag: none;
 }
 
 .portfolio-menu {
@@ -245,41 +276,63 @@ footer {
 
   nav ul {
     position: fixed;
-    top: 100vh; /* Start off-screen */
-    left: 0;
-    height: 100vh;
-    width: 100vw;
+    inset: 0;
+    transform: translateY(100%);
     background: #D2F059; /* Solid green background */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-top: 60px;
-    transition: top 0.5s ease;
-}
-
-
-nav ul.open {
-    top: 0; /* Bring into view */
-}
-
+    gap: 16px;
+    padding: 0;
+    transition: transform 0.5s ease;
+    z-index: 3000;
+    pointer-events: none;
+    text-align: center;
+  }
 
   nav ul.open {
-    display: flex;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   nav li {
     display: block;
+    margin: 0;
   }
 
   nav a {
-    color: #fff;
+    color: #000;
     padding: 10px 20px;
     display: block;
+    text-align: center;
   }
 
-  .draggable-image {
-    cursor: move;
+  .menu-close {
+    display: block;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    padding: 10px;
+    font-size: 28px;
+    line-height: 1;
+    color: #000;
+    z-index: 3100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    transition-delay: 0s;
+  }
+
+  nav ul.open + .menu-close {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.4s;
+  }
+}
+
+.draggable-image {
+  cursor: move;
 }
 
 /* For smaller screens */
