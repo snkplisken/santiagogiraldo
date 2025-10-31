@@ -8,6 +8,42 @@ canvas.style.width = "100%";
 canvas.style.height = "100vh";
 canvas.style.userSelect = "none";
 
+const detectFinePointer = () => {
+  if (typeof window === "undefined") {
+    return true;
+  }
+
+  if (typeof window.matchMedia === "function") {
+    const finePointer = window.matchMedia("(pointer: fine)");
+    if (finePointer.matches) {
+      return true;
+    }
+
+    const hoverPointer = window.matchMedia("(hover: hover)");
+    if (hoverPointer.matches) {
+      return true;
+    }
+
+    const coarsePointer = window.matchMedia("(pointer: coarse)");
+    if (coarsePointer.matches) {
+      return false;
+    }
+  }
+
+  if (typeof navigator !== "undefined") {
+    const touchPoints = navigator.maxTouchPoints || navigator.msMaxTouchPoints || 0;
+    if (touchPoints > 0) {
+      return false;
+    }
+  }
+
+  return !("ontouchstart" in window);
+};
+
+const allowPointerControls = detectFinePointer();
+
+canvas.style.touchAction = "none";
+
 const dpr = Math.max(1, 0.5 * window.devicePixelRatio);
 
 function resize() {
@@ -225,11 +261,120 @@ init()
 resize()
 loop(0)
 
-window.addEventListener("pointerdown", e => mouse.update(e.clientX, e.clientY, e.pointerId))
-window.addEventListener("pointerup", e => mouse.remove(e.pointerId))
-window.addEventListener("pointermove", e => {
-  if (mouse.touches.has(e.pointerId))
-    mouse.update(e.clientX, e.clientY, e.pointerId)
+const hasPointerEvents = typeof window !== "undefined" && "PointerEvent" in window;
 
+if (allowPointerControls && hasPointerEvents) {
+  const activePointerIds = new Set();
 
-})
+  const handlePointerDown = (event) => {
+    if (!allowPointerControls) {
+      return;
+    }
+
+    if (event.button !== undefined && event.button !== 0) {
+      return;
+    }
+
+    if (event.pointerType && event.pointerType !== "mouse" && event.pointerType !== "pen") {
+      return;
+    }
+
+    activePointerIds.add(event.pointerId);
+    if (canvas.setPointerCapture) {
+      canvas.setPointerCapture(event.pointerId);
+    }
+
+    mouse.update(event.clientX, event.clientY, event.pointerId);
+    event.preventDefault();
+  };
+
+  const handlePointerMove = (event) => {
+    if (!activePointerIds.has(event.pointerId)) {
+      return;
+    }
+
+    mouse.update(event.clientX, event.clientY, event.pointerId);
+    event.preventDefault();
+  };
+
+  const releasePointerId = (pointerId) => {
+    if (activePointerIds.has(pointerId)) {
+      activePointerIds.delete(pointerId);
+      if (canvas.releasePointerCapture) {
+        if (!canvas.hasPointerCapture || canvas.hasPointerCapture(pointerId)) {
+          canvas.releasePointerCapture(pointerId);
+        }
+      }
+    }
+
+    mouse.remove(pointerId);
+  };
+
+  const handlePointerEnd = (event) => {
+    releasePointerId(event.pointerId);
+    event.preventDefault();
+  };
+
+  const handleWindowBlur = () => {
+    [...activePointerIds].forEach((pointerId) => {
+      releasePointerId(pointerId);
+    });
+  };
+
+  canvas.addEventListener("pointerdown", handlePointerDown, { passive: false });
+  canvas.addEventListener("pointermove", handlePointerMove, { passive: false });
+
+  ["pointerup", "pointercancel", "pointerleave", "lostpointercapture"].forEach((type) => {
+    canvas.addEventListener(type, handlePointerEnd, { passive: false });
+  });
+
+  window.addEventListener("blur", handleWindowBlur);
+} else if (allowPointerControls) {
+  let isMouseDown = false;
+
+  const mousePointerId = "mouse";
+
+  const handleMouseDown = (event) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    isMouseDown = true;
+    mouse.update(event.clientX, event.clientY, mousePointerId);
+    event.preventDefault();
+  };
+
+  const handleMouseMove = (event) => {
+    if (!isMouseDown) {
+      return;
+    }
+
+    mouse.update(event.clientX, event.clientY, mousePointerId);
+    event.preventDefault();
+  };
+
+  const handleMouseUp = () => {
+    if (!isMouseDown) {
+      return;
+    }
+
+    isMouseDown = false;
+    mouse.remove(mousePointerId);
+  };
+
+  canvas.addEventListener("mousedown", handleMouseDown, { passive: false });
+  window.addEventListener("mousemove", handleMouseMove, { passive: false });
+  window.addEventListener("mouseup", handleMouseUp);
+  canvas.addEventListener("mouseleave", handleMouseUp);
+  window.addEventListener("blur", handleMouseUp);
+} else {
+  const preventTouchScroll = (event) => {
+    if (event.cancelable) {
+      event.preventDefault()
+    }
+  }
+
+  ;["touchstart", "touchmove", "touchend", "touchcancel"].forEach(type => {
+    canvas.addEventListener(type, preventTouchScroll, { passive: false })
+  })
+}
