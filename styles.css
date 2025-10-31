@@ -146,6 +146,15 @@ footer {
   margin: 5px 0;
 }
 
+.menu-close {
+  display: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
 .horizontal-gallery {
   display: flex;
   height: 100vh; /* Full viewport height */
@@ -274,15 +283,10 @@ footer {
     padding-top: 60px;
     transition: top 0.5s ease;
     z-index: 2000;
-}
-
-
-nav ul.open {
-    top: 0; /* Bring into view */
-}
-
+  }
 
   nav ul.open {
+    top: 0; /* Bring into view */
     display: flex;
   }
 
@@ -296,8 +300,24 @@ nav ul.open {
     display: block;
   }
 
-  .draggable-image {
-    cursor: move;
+  nav ul.open + .menu-close {
+    display: block;
+  }
+
+  .menu-close {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    padding: 10px;
+    font-size: 28px;
+    line-height: 1;
+    color: #000;
+    z-index: 2100;
+  }
+}
+
+.draggable-image {
+  cursor: move;
 }
 
 /* For smaller screens */

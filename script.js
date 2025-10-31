@@ -84,9 +84,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hamburger Menu Functionality
     const hamburgerMenu = document.querySelector('.hamburger-menu');
     const navUl = document.querySelector('nav ul');
+    const closeMenuButton = document.querySelector('.menu-close');
+
     if (hamburgerMenu && navUl) {
         hamburgerMenu.addEventListener('click', function() {
             navUl.classList.toggle('open');
+        });
+    }
+
+    if (closeMenuButton && navUl) {
+        closeMenuButton.addEventListener('click', function() {
+            navUl.classList.remove('open');
         });
     }
 
