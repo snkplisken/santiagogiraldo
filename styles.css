@@ -352,8 +352,7 @@ body.menu-open footer {
   .portfolio-gallery {
     margin-left: 0;
     width: 100%;
-  }}
-
+  }
 }
 
 .about-hero {
@@ -365,7 +364,8 @@ body.menu-open footer {
   min-height: 100vh;
   padding: 140px 30px 80px;
   box-sizing: border-box;
-  width: min(960px, 100%);
+  width: 100%;
+  max-width: 960px;
   margin: 0 auto;
 }
 
