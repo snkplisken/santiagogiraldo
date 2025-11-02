@@ -47,6 +47,7 @@ function loadModel(url) {
       camera.lookAt(model.position);
       controls.target.copy(model.position);
       controls.update();
+      renderScene();
     },
     undefined,
     (error) => {
@@ -56,8 +57,8 @@ function loadModel(url) {
 }
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
+
+const MAX_PIXEL_RATIO = 1.5;
 
 function resizeRendererToDisplaySize() {
   const { clientWidth, clientHeight } = container;
@@ -65,17 +66,11 @@ function resizeRendererToDisplaySize() {
     return;
   }
 
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-  const width = Math.floor(clientWidth * pixelRatio);
-  const height = Math.floor(clientHeight * pixelRatio);
-  const canvas = renderer.domElement;
-
-  if (canvas.width !== width || canvas.height !== height) {
-    renderer.setPixelRatio(pixelRatio);
-    renderer.setSize(clientWidth, clientHeight, false);
-    camera.aspect = clientWidth / clientHeight;
-    camera.updateProjectionMatrix();
-  }
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
+  renderer.setPixelRatio(pixelRatio);
+  renderer.setSize(clientWidth, clientHeight, false);
+  camera.aspect = clientWidth / clientHeight;
+  camera.updateProjectionMatrix();
 }
 
 function updateCameraFov() {
@@ -87,21 +82,26 @@ function updateCameraFov() {
   }
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-  resizeRendererToDisplaySize();
-  updateCameraFov();
-  controls.update();
+function renderScene() {
   renderer.render(scene, camera);
 }
 
-const resizeObserver = new ResizeObserver(() => {
+function handleResize() {
   resizeRendererToDisplaySize();
   updateCameraFov();
-});
-resizeObserver.observe(container);
+  renderScene();
+}
+
+controls.addEventListener('change', renderScene);
+
+if (typeof ResizeObserver !== 'undefined') {
+  const resizeObserver = new ResizeObserver(handleResize);
+  resizeObserver.observe(container);
+}
+
+window.addEventListener('resize', handleResize);
 
 resizeRendererToDisplaySize();
 updateCameraFov();
 loadModel(modelUrl);
-animate();
+renderScene();
