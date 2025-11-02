@@ -356,24 +356,26 @@ body.menu-open footer {
 
 }
 
+
 .about-hero {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   gap: 40px;
   min-height: 100vh;
   padding: 120px 60px 80px;
   box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .about-canvas-wrapper {
-  flex: 1 1 50%;
-  max-width: 600px;
   width: 100%;
+  max-width: 560px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
 }
 
 #about-three-container {
@@ -390,15 +392,14 @@ body.menu-open footer {
 }
 
 .about-text {
-  flex: 1 1 40%;
-  max-width: 480px;
+  width: 100%;
+  max-width: 520px;
   color: #D2F059;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin: 0 auto;
 }
 
 .about-text h1 {
@@ -414,8 +415,7 @@ body.menu-open footer {
 
 @media (max-width: 960px) {
   .about-hero {
-    flex-direction: column;
-    text-align: center;
+    grid-template-columns: 1fr;
     padding: 140px 30px 60px;
   }
 
