@@ -9,99 +9,87 @@ if (!container) {
 }
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
-camera.position.set(0, 4, 8);
+const camera = new THREE.PerspectiveCamera(
+  45,
+  1,
+  0.1,
+  100
+);
+camera.position.set(0, 2.5, 6);
 
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-renderer.setClearColor(0x000000, 0);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 container.appendChild(renderer.domElement);
 
-const keyLight = new THREE.PointLight(0xffffff, 2, 100);
-keyLight.position.set(0, 0, 10);
-scene.add(keyLight);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+scene.add(ambientLight);
 
-const fillLight = new THREE.PointLight(0xffffff, 1, 100);
-fillLight.position.set(10, 0, 10);
-scene.add(fillLight);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.4);
+directionalLight.position.set(4, 6, 8);
+scene.add(directionalLight);
 
-const backLight = new THREE.PointLight(0xffffff, 1, 100);
-backLight.position.set(0, 0, -10);
+const backLight = new THREE.DirectionalLight(0xffffff, 0.8);
+backLight.position.set(-4, -3, -6);
 scene.add(backLight);
 
-const loader = new GLTFLoader();
-const modelUrl = 'SantiagoLogo.glb';
-
-function setupModel(model) {
-  model.position.set(-0.35, 0, -0.5);
-  model.rotation.set(-0.25, 0, 0);
-}
-
-function loadModel(url) {
-  loader.load(
-    url,
-    (gltf) => {
-      const model = gltf.scene;
-      setupModel(model);
-      scene.add(model);
-      camera.lookAt(model.position);
-      controls.target.copy(model.position);
-      controls.update();
-      renderScene();
-    },
-    undefined,
-    (error) => {
-      console.error('An error happened while loading the model:', error);
-    }
-  );
-}
-
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.dampingFactor = 0.1;
+controls.rotateSpeed = 0.6;
+controls.minDistance = 3;
+controls.maxDistance = 10;
 
-const MAX_PIXEL_RATIO = 1.5;
+const loader = new GLTFLoader();
+let activeModel = null;
 
-function resizeRendererToDisplaySize() {
+loader.load(
+  'SantiagoLogo.glb',
+  (gltf) => {
+    activeModel = gltf.scene;
+    activeModel.position.set(0, -0.6, 0);
+    activeModel.rotation.set(0, Math.PI / 4, 0);
+    scene.add(activeModel);
+
+    camera.lookAt(activeModel.position);
+    controls.target.copy(activeModel.position);
+    onResize();
+    animate();
+  },
+  undefined,
+  (error) => {
+    console.error('An error happened while loading the model:', error);
+  }
+);
+
+function onResize() {
   const { clientWidth, clientHeight } = container;
   if (!clientWidth || !clientHeight) {
     return;
   }
 
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
-  renderer.setPixelRatio(pixelRatio);
+  renderer.setPixelRatio(window.devicePixelRatio || 1);
   renderer.setSize(clientWidth, clientHeight, false);
   camera.aspect = clientWidth / clientHeight;
   camera.updateProjectionMatrix();
 }
 
-function updateCameraFov() {
-  const width = container.clientWidth;
-  const zoomLevel = width < 480 ? 65 : width < 768 ? 55 : 45;
-  if (camera.fov !== zoomLevel) {
-    camera.fov = zoomLevel;
-    camera.updateProjectionMatrix();
-  }
-}
+function animate() {
+  requestAnimationFrame(animate);
 
-function renderScene() {
+  if (activeModel) {
+    activeModel.rotation.y += 0.0025;
+  }
+
+  controls.update();
   renderer.render(scene, camera);
 }
 
-function handleResize() {
-  resizeRendererToDisplaySize();
-  updateCameraFov();
-  renderScene();
-}
-
-controls.addEventListener('change', renderScene);
+window.addEventListener('resize', onResize);
 
 if (typeof ResizeObserver !== 'undefined') {
-  const resizeObserver = new ResizeObserver(handleResize);
+  const resizeObserver = new ResizeObserver(onResize);
   resizeObserver.observe(container);
 }
 
-window.addEventListener('resize', handleResize);
-
-resizeRendererToDisplaySize();
-updateCameraFov();
-loadModel(modelUrl);
-renderScene();
+onResize();
