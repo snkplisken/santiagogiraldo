@@ -17,8 +17,69 @@ body, html {
   overflow-x: hidden;
 }
 
-canvas { 
-  display: block; 
+canvas {
+  display: block;
+}
+
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 6vw, 6rem);
+  min-height: 100vh;
+  padding: 180px 10vw 120px;
+  box-sizing: border-box;
+}
+
+.about-canvas-wrapper {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+}
+
+.about-threejs {
+  width: min(520px, 45vw);
+  height: min(520px, 60vh);
+  border: 2px solid #D2F059;
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.about-content {
+  flex: 1 1 0;
+  max-width: 500px;
+  color: #D2F059;
+}
+
+.about-content h1 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.08em;
+}
+
+.about-content p {
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .about-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 160px 2.5rem 100px;
+  }
+
+  .about-content {
+    max-width: 100%;
+  }
+
+  .about-threejs {
+    width: min(420px, 75vw);
+    height: min(420px, 55vh);
+  }
 }
 
 header {
