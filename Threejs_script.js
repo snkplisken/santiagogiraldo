@@ -89,6 +89,18 @@ const backLight = new THREE.PointLight(0xffffff, 1, 100);
 backLight.position.set(0, 0, -10);
 scene.add(backLight);
 
+const lightingSliderConfigurations = [
+    { inputId: 'key-light-x', valueId: 'key-light-x-value', apply: (value) => { keyLight.position.x = value; } },
+    { inputId: 'key-light-y', valueId: 'key-light-y-value', apply: (value) => { keyLight.position.y = value; } },
+    { inputId: 'key-light-z', valueId: 'key-light-z-value', apply: (value) => { keyLight.position.z = value; } },
+    { inputId: 'fill-light-x', valueId: 'fill-light-x-value', apply: (value) => { fillLight.position.x = value; } },
+    { inputId: 'fill-light-y', valueId: 'fill-light-y-value', apply: (value) => { fillLight.position.y = value; } },
+    { inputId: 'fill-light-z', valueId: 'fill-light-z-value', apply: (value) => { fillLight.position.z = value; } },
+    { inputId: 'back-light-x', valueId: 'back-light-x-value', apply: (value) => { backLight.position.x = value; } },
+    { inputId: 'back-light-y', valueId: 'back-light-y-value', apply: (value) => { backLight.position.y = value; } },
+    { inputId: 'back-light-z', valueId: 'back-light-z-value', apply: (value) => { backLight.position.z = value; } },
+];
+
 const loader = new GLTFLoader();
 
 // Allow each page to define its own model and transform
@@ -184,4 +196,71 @@ document.addEventListener('DOMContentLoaded', function() {
             this.parentElement.style.display = 'none'; // Hides the footer
         };
     }
+
+    const lightingToggle = document.querySelector('[data-lighting-toggle]');
+    const lightingControls = document.querySelector('[data-lighting-controls]');
+    const lightingClose = document.querySelector('[data-lighting-close]');
+
+    const applyLightingPanelState = (isOpen) => {
+        if (!lightingControls) {
+            return;
+        }
+
+        lightingControls.classList.toggle('is-visible', isOpen);
+        lightingControls.setAttribute('aria-hidden', String(!isOpen));
+
+        if (lightingToggle) {
+            lightingToggle.setAttribute('aria-expanded', String(isOpen));
+        }
+    };
+
+    if (lightingToggle && lightingControls) {
+        lightingToggle.addEventListener('click', () => {
+            const isOpen = !lightingControls.classList.contains('is-visible');
+            applyLightingPanelState(isOpen);
+        });
+    }
+
+    if (lightingClose && lightingControls) {
+        lightingClose.addEventListener('click', () => {
+            applyLightingPanelState(false);
+        });
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && lightingControls?.classList.contains('is-visible')) {
+            applyLightingPanelState(false);
+        }
+    });
+
+    const bindLightingSlider = (configuration) => {
+        const slider = document.getElementById(configuration.inputId);
+        if (!slider) {
+            return;
+        }
+
+        const valueDisplay = configuration.valueId
+            ? document.getElementById(configuration.valueId)
+            : null;
+
+        const update = () => {
+            const rawValue = Number.parseFloat(slider.value);
+            if (Number.isNaN(rawValue)) {
+                return;
+            }
+
+            configuration.apply(rawValue);
+
+            if (valueDisplay) {
+                valueDisplay.textContent = rawValue.toFixed(1);
+            }
+        };
+
+        slider.addEventListener('input', update);
+        slider.addEventListener('change', update);
+
+        update();
+    };
+
+    lightingSliderConfigurations.forEach(bindLightingSlider);
 });
