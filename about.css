@@ -1,0 +1,60 @@
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  min-height: 100vh;
+  padding: 180px 10vw 120px;
+  box-sizing: border-box;
+}
+
+.about-canvas-wrapper {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+}
+
+.about-threejs {
+  width: min(520px, 45vw);
+  height: min(520px, 60vh);
+}
+
+.about-threejs canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.about-content {
+  flex: 1 1 0;
+  max-width: 500px;
+  color: #D2F059;
+}
+
+.about-content h1 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.08em;
+}
+
+.about-content p {
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .about-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 160px 2.5rem 100px;
+  }
+
+  .about-content {
+    max-width: 100%;
+  }
+
+  .about-threejs {
+    width: min(420px, 75vw);
+    height: min(420px, 55vh);
+  }
+}
