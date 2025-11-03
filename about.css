@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(1rem, 3vw, 2.5rem);
+  gap: clamp(0.75rem, 2.5vw, 2rem);
   min-height: 100vh;
   padding: 180px 10vw 120px;
   box-sizing: border-box;
@@ -17,6 +17,10 @@
 .about-threejs {
   width: min(520px, 45vw);
   height: min(520px, 60vh);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
 }
 
 .about-threejs canvas {
