@@ -2,9 +2,18 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// Read page-specific configuration from the script tag (if provided)
+// Pages can override the model and container by attaching data attributes
+// to the <script type="module" src="Threejs_script.js"> tag, e.g.
+// <script type="module" src="Threejs_script.js" data-model-url="MyModel.glb"></script>
+// Any data-* attribute becomes available through scriptDataset below.
 const scriptElement = document.querySelector('script[type="module"][src$="Threejs_script.js"]');
 const scriptDataset = scriptElement?.dataset ?? {};
+
+if (!scriptElement) {
+    console.info(
+        'Threejs_script.js: using default model configuration. Add data attributes to the module script tag to override the model per page.'
+    );
+}
 
 const DEFAULT_MODEL_URL = 'SantiagoLogo.glb';
 const DEFAULT_CONTAINER_ID = 'threejs-container';
@@ -84,6 +93,13 @@ const loader = new GLTFLoader();
 
 // Allow each page to define its own model and transform
 const modelUrl = scriptDataset.modelUrl || DEFAULT_MODEL_URL;
+if (scriptDataset.modelUrl) {
+    console.info(`Threejs_script.js: loading per-page model override from data-model-url="${scriptDataset.modelUrl}".`);
+} else {
+    console.info(
+        `Threejs_script.js: loading default model "${DEFAULT_MODEL_URL}". Set data-model-url on the module script tag to load a different model on this page.`
+    );
+}
 const modelPosition = parseVector(scriptDataset.modelPosition, DEFAULT_MODEL_POSITION);
 const modelRotation = parseVector(scriptDataset.modelRotation, DEFAULT_MODEL_ROTATION);
 
