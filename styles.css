@@ -91,6 +91,229 @@ header {
   z-index: 1000;
 }
 
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 24px 160px;
+  box-sizing: border-box;
+}
+
+.hero-model {
+  position: relative;
+  width: min(90vw, 680px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.hero-model__canvas {
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: min(80vh, 600px);
+  border: 2px solid #D2F059;
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.hero-model__canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.lighting-toggle {
+  position: absolute;
+  bottom: 22px;
+  right: 22px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 2px solid #D2F059;
+  background: rgba(0, 0, 0, 0.65);
+  color: #D2F059;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+
+.lighting-toggle:hover,
+.lighting-toggle:focus-visible {
+  background: #D2F059;
+  color: #000;
+  outline: none;
+}
+
+.lighting-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 110px;
+  transform: translate(-50%, 20px);
+  width: min(480px, 90vw);
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(210, 240, 89, 0.65);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  color: #D2F059;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 1002;
+}
+
+.lighting-controls.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.lighting-controls__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.lighting-controls__header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+}
+
+.lighting-close {
+  background: none;
+  border: none;
+  color: #D2F059;
+  font-size: 1.25rem;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.lighting-close:hover,
+.lighting-close:focus-visible {
+  background: rgba(210, 240, 89, 0.15);
+  color: #fff;
+  outline: none;
+}
+
+.lighting-controls__description {
+  margin: 0 0 18px;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: rgba(210, 240, 89, 0.8);
+}
+
+.lighting-controls__group {
+  margin-bottom: 18px;
+}
+
+.lighting-controls__group:last-of-type {
+  margin-bottom: 0;
+}
+
+.lighting-controls__group h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lighting-slider {
+  display: grid;
+  grid-template-columns: 110px 1fr 48px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+}
+
+.lighting-slider:last-of-type {
+  margin-bottom: 0;
+}
+
+.lighting-slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(210, 240, 89, 0.3);
+  outline: none;
+}
+
+.lighting-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #D2F059;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(210, 240, 89, 0.2);
+}
+
+.lighting-slider input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #D2F059;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(210, 240, 89, 0.2);
+}
+
+.lighting-slider__value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 120px 20px 140px;
+  }
+
+  .lighting-toggle {
+    position: static;
+    align-self: flex-end;
+  }
+
+  .lighting-controls {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-top: 6px;
+    opacity: 1;
+    visibility: hidden;
+    pointer-events: none;
+    display: none;
+  }
+
+  .lighting-controls.is-visible {
+    transform: none;
+    visibility: visible;
+    pointer-events: auto;
+    display: block;
+  }
+}
+
 .logo {
   position: absolute;
   top: 10px;
