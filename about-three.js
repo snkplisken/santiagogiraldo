@@ -9,36 +9,30 @@ if (!container) {
 }
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  45,
-  1,
-  0.1,
-  100
-);
-camera.position.set(0, 2.5, 6);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+camera.position.set(0, 2.8, 6);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+renderer.setClearColor(0x000000, 0);
 container.appendChild(renderer.domElement);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-scene.add(ambientLight);
+const keyLight = new THREE.PointLight(0xffffff, 2.2, 100);
+keyLight.position.set(0, 2, 8);
+scene.add(keyLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.4);
-directionalLight.position.set(4, 6, 8);
-scene.add(directionalLight);
+const fillLight = new THREE.PointLight(0xffffff, 1.2, 100);
+fillLight.position.set(6, 2, 4);
+scene.add(fillLight);
 
-const backLight = new THREE.DirectionalLight(0xffffff, 0.8);
-backLight.position.set(-4, -3, -6);
-scene.add(backLight);
+const rimLight = new THREE.PointLight(0xffffff, 0.8, 100);
+rimLight.position.set(-4, -1, -6);
+scene.add(rimLight);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
 controls.enablePan = false;
-controls.dampingFactor = 0.1;
-controls.rotateSpeed = 0.6;
-controls.minDistance = 3;
-controls.maxDistance = 10;
+controls.enableZoom = true;
+controls.addEventListener('change', render);
 
 const loader = new GLTFLoader();
 let activeModel = null;
@@ -48,13 +42,11 @@ loader.load(
   (gltf) => {
     activeModel = gltf.scene;
     activeModel.position.set(0, -0.6, 0);
-    activeModel.rotation.set(0, Math.PI / 4, 0);
     scene.add(activeModel);
 
-    camera.lookAt(activeModel.position);
     controls.target.copy(activeModel.position);
     onResize();
-    animate();
+    render();
   },
   undefined,
   (error) => {
@@ -68,20 +60,33 @@ function onResize() {
     return;
   }
 
-  renderer.setPixelRatio(window.devicePixelRatio || 1);
   renderer.setSize(clientWidth, clientHeight, false);
   camera.aspect = clientWidth / clientHeight;
   camera.updateProjectionMatrix();
+  adjustCamera();
+  render();
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-
-  if (activeModel) {
-    activeModel.rotation.y += 0.0025;
+function adjustCamera() {
+  if (!activeModel) {
+    return;
   }
 
-  controls.update();
+  const boundingBox = new THREE.Box3().setFromObject(activeModel);
+  const size = boundingBox.getSize(new THREE.Vector3());
+  const center = boundingBox.getCenter(new THREE.Vector3());
+
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const fitHeightDistance = maxDim / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
+  const fitWidthDistance = fitHeightDistance / camera.aspect;
+  const distance = Math.max(fitHeightDistance, fitWidthDistance) + 0.5;
+
+  camera.position.set(center.x, center.y + maxDim * 0.25, center.z + distance);
+  camera.lookAt(center);
+  controls.target.copy(center);
+}
+
+function render() {
   renderer.render(scene, camera);
 }
 
