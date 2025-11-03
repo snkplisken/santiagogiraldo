@@ -5,13 +5,35 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // Three.js Scene Setup
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const container = document.getElementById('threejs-container');
+
+const getContainerSize = () => {
+    if (!container) {
+        return { width: window.innerWidth, height: window.innerHeight };
+    }
+
+    const { clientWidth, clientHeight } = container;
+    return {
+        width: clientWidth || window.innerWidth,
+        height: clientHeight || window.innerHeight,
+    };
+};
+
+const { width: initialWidth, height: initialHeight } = getContainerSize();
+
+const camera = new THREE.PerspectiveCamera(75, initialWidth / initialHeight, 0.1, 1000);
 camera.position.set(0, 4, 8);
 
-const renderer = new THREE.WebGLRenderer({ alpha: true });
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setClearColor(0x000000, 0); // Transparent background
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(initialWidth, initialHeight);
+
+if (container) {
+    container.appendChild(renderer.domElement);
+} else {
+    document.body.appendChild(renderer.domElement);
+}
 
 const keyLight = new THREE.PointLight(0xffffff, 2, 100);
 keyLight.position.set(0, 0, 10);
@@ -54,7 +76,8 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 // Function to control camera zoom based on window width
 function setCameraZoom() {
-    const zoomLevel = window.innerWidth < 720 ? 50 : 30;
+    const { width } = getContainerSize();
+    const zoomLevel = width < 720 ? 50 : 30;
     camera.fov = zoomLevel;
     camera.updateProjectionMatrix();
 }
@@ -68,9 +91,10 @@ function animate() {
 animate();
 
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const { width, height } = getContainerSize();
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
     setCameraZoom(); // Adjust zoom on resize
 });
 

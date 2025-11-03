@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minimal Portfolio & 3D Model Display</title>
+  <title>Minimal Portfolio &amp; 3D Model Display</title>
   <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.149.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.149.0/examples/jsm/"
+      }
+    }
+  </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200&display=swap');
   </style>
@@ -31,12 +39,24 @@
           <img src="Logo.svg" alt="Logo" />
       </a>
   </div>
-  
+
   </header>
   <main>
-    <!-- Main content would go here -->
+    <section class="about-section">
+      <div class="about-canvas-wrapper">
+        <div id="threejs-container" class="about-threejs"></div>
+      </div>
+      <div class="about-content">
+        <h1>Santiago Giraldo</h1>
+        <p>
+          I'm a multidisciplinary designer exploring the intersection of 3D, graphic design, and immersive
+          storytelling. This section will soon become a hub for my favorite tools, stories, and inspirations. Stay
+          tuned—more updates coming soon.
+        </p>
+      </div>
+    </section>
   </main>
-  
+
   <footer>
     <div class="footer-content">
       <div id="clock" class="footer-clock">00:00:00</div>
@@ -46,7 +66,8 @@
     </div>
     <button id="footerCloseButton">X</button>
   </footer>
-  
+
+  <script type="module" src="Threejs_script.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
