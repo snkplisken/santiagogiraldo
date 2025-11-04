@@ -186,6 +186,10 @@ header {
   box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
   color: #D2F059;
+  max-height: min(75vh, 560px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -272,6 +276,26 @@ header {
   margin-bottom: 0;
 }
 
+.lighting-color {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+}
+
+.lighting-color input[type="color"] {
+  width: 100%;
+  height: 36px;
+  border: 1px solid rgba(210, 240, 89, 0.4);
+  border-radius: 8px;
+  background: rgba(210, 240, 89, 0.1);
+  cursor: pointer;
+  padding: 0;
+}
+
 .lighting-slider input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -309,6 +333,14 @@ header {
   font-variant-numeric: tabular-nums;
 }
 
+body.lighting-panel-open {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .hero {
     padding: 0;
@@ -320,8 +352,20 @@ header {
   }
 
   .lighting-controls {
-    width: min(94vw, 360px);
-    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 164px);
+    width: min(92vw, 320px);
+    padding: 20px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 160px);
+    max-height: min(70vh, 440px);
+  }
+
+  .lighting-slider {
+    grid-template-columns: 100px 1fr 44px;
+    gap: 10px;
+  }
+
+  .lighting-color {
+    grid-template-columns: 100px 1fr;
+    gap: 10px;
   }
 }
 

@@ -286,8 +286,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             interactionHint.textContent = queryEvent.matches
-                ? 'Move the model with your finger'
-                : 'Move the model with your cursor';
+                ? 'Move the model with your finger and adjust the lighting'
+                : 'Move the model with your cursor and adjust the lighting';
         };
 
         const handleMediaChange = (event) => updateHintText(event);
