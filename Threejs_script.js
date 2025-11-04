@@ -93,12 +93,21 @@ const lightingSliderConfigurations = [
     { inputId: 'key-light-x', valueId: 'key-light-x-value', apply: (value) => { keyLight.position.x = value; } },
     { inputId: 'key-light-y', valueId: 'key-light-y-value', apply: (value) => { keyLight.position.y = value; } },
     { inputId: 'key-light-z', valueId: 'key-light-z-value', apply: (value) => { keyLight.position.z = value; } },
+    { inputId: 'key-light-intensity', valueId: 'key-light-intensity-value', apply: (value) => { keyLight.intensity = value; } },
     { inputId: 'fill-light-x', valueId: 'fill-light-x-value', apply: (value) => { fillLight.position.x = value; } },
     { inputId: 'fill-light-y', valueId: 'fill-light-y-value', apply: (value) => { fillLight.position.y = value; } },
     { inputId: 'fill-light-z', valueId: 'fill-light-z-value', apply: (value) => { fillLight.position.z = value; } },
+    { inputId: 'fill-light-intensity', valueId: 'fill-light-intensity-value', apply: (value) => { fillLight.intensity = value; } },
     { inputId: 'back-light-x', valueId: 'back-light-x-value', apply: (value) => { backLight.position.x = value; } },
     { inputId: 'back-light-y', valueId: 'back-light-y-value', apply: (value) => { backLight.position.y = value; } },
     { inputId: 'back-light-z', valueId: 'back-light-z-value', apply: (value) => { backLight.position.z = value; } },
+    { inputId: 'back-light-intensity', valueId: 'back-light-intensity-value', apply: (value) => { backLight.intensity = value; } },
+];
+
+const lightingColorConfigurations = [
+    { inputId: 'key-light-color', apply: (value) => { keyLight.color.set(value); } },
+    { inputId: 'fill-light-color', apply: (value) => { fillLight.color.set(value); } },
+    { inputId: 'back-light-color', apply: (value) => { backLight.color.set(value); } },
 ];
 
 const loader = new GLTFLoader();
@@ -214,6 +223,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    const handleDocumentPointerDown = (event) => {
+        if (!lightingControls?.classList.contains('is-visible')) {
+            return;
+        }
+
+        const target = event.target;
+
+        if (!(target instanceof Node)) {
+            return;
+        }
+
+        if (lightingControls.contains(target) || lightingToggle?.contains(target)) {
+            return;
+        }
+
+        applyLightingPanelState(false);
+    };
+
     if (lightingToggle && lightingControls) {
         lightingToggle.addEventListener('click', () => {
             const isOpen = !lightingControls.classList.contains('is-visible');
@@ -232,6 +259,8 @@ document.addEventListener('DOMContentLoaded', function() {
             applyLightingPanelState(false);
         }
     });
+
+    document.addEventListener('pointerdown', handleDocumentPointerDown);
 
     const bindLightingSlider = (configuration) => {
         const slider = document.getElementById(configuration.inputId);
@@ -263,4 +292,22 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     lightingSliderConfigurations.forEach(bindLightingSlider);
+
+    const bindLightingColor = (configuration) => {
+        const colorInput = document.getElementById(configuration.inputId);
+        if (!colorInput) {
+            return;
+        }
+
+        const update = () => {
+            configuration.apply(colorInput.value);
+        };
+
+        colorInput.addEventListener('input', update);
+        colorInput.addEventListener('change', update);
+
+        update();
+    };
+
+    lightingColorConfigurations.forEach(bindLightingColor);
 });
