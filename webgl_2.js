@@ -5,6 +5,12 @@ canvas.style.width = "100%";
 canvas.style.height = "100vh";
 canvas.style.cursor = "ns-resize";
 
+const prefersTouch = window.matchMedia("(pointer: coarse)").matches;
+if (prefersTouch) {
+    canvas.style.touchAction = "none";
+    document.body.classList.add("no-scroll-mobile");
+}
+
 // Color configuration
 const COLORS = {
     bg: [0.05, 0.06, 0.1, 1],
@@ -71,6 +77,7 @@ const fragmentSource = `#version 300 es
 // WebGL Setup
 let program, buffer;
 let waveScale = 0.1;
+let lastTouchY = null;
 
 function init() {
     const vs = gl.createShader(gl.VERTEX_SHADER);
@@ -118,6 +125,33 @@ window.addEventListener("wheel", e => {
     waveScale = Math.min(Math.max(waveScale + (e.deltaY * 0.0001), 0.1), 1.5);
     e.preventDefault();
 }, { passive: false });
+
+const handleTouchStart = (event) => {
+    if (!prefersTouch || event.touches.length !== 1) {
+        return;
+    }
+    lastTouchY = event.touches[0].clientY;
+};
+
+const handleTouchMove = (event) => {
+    if (!prefersTouch || lastTouchY === null || event.touches.length !== 1) {
+        return;
+    }
+    const currentY = event.touches[0].clientY;
+    const deltaY = lastTouchY - currentY;
+    waveScale = Math.min(Math.max(waveScale + (deltaY * 0.0025), 0.1), 1.5);
+    lastTouchY = currentY;
+    event.preventDefault();
+};
+
+const handleTouchEnd = () => {
+    lastTouchY = null;
+};
+
+canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+canvas.addEventListener("touchend", handleTouchEnd);
+canvas.addEventListener("touchcancel", handleTouchEnd);
 
 const resizeObserver = new ResizeObserver(entries => {
     canvas.width = entries[0].contentRect.width * devicePixelRatio;
