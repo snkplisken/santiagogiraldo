@@ -22,22 +22,25 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', updateViewportOffset);
 
     // Clock functionality
-    function updateClock() {
-        const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const seconds = now.getSeconds().toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        const month = (now.getMonth() + 1).toString().padStart(2, '0'); // JavaScript months are 0-based.
-        const year = now.getFullYear();
-        const formattedTime = `${hours}:${minutes}:${seconds}`;
-        const formattedDate = `${month}/${day}/${year}`;
-        document.getElementById('clock').textContent = `${formattedDate} ${formattedTime}`;
-    }
+    const clockElement = document.getElementById('clock');
+    if (clockElement) {
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0'); // JavaScript months are 0-based.
+            const year = now.getFullYear();
+            const formattedTime = `${hours}:${minutes}:${seconds}`;
+            const formattedDate = `${month}/${day}/${year}`;
+            clockElement.textContent = `${formattedDate} ${formattedTime}`;
+        }
 
-    // Update the clock immediately and then every 1 second.
-    updateClock();
-    setInterval(updateClock, 1000);
+        // Update the clock immediately and then every 1 second.
+        updateClock();
+        setInterval(updateClock, 1000);
+    }
 
     // Functionality for showing project galleries
     function showGallery(projectId) {
@@ -89,6 +92,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const hamburgerMenu = document.querySelector('.hamburger-menu');
     const navUl = document.querySelector('nav ul');
+    if (navUl) {
+        navUl.classList.remove('open');
+    }
     const closeMenuButton = document.querySelector('.menu-close');
 
     const applyMenuState = (isOpen) => {
