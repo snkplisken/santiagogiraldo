@@ -543,6 +543,13 @@ body.menu-open footer {
     z-index: 1001;
   }
 
+  body.menu-open .lighting-toggle,
+  body.menu-open .lighting-controls {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   nav ul {
     position: fixed;
     inset: 0;
