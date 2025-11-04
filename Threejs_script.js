@@ -209,6 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const lightingToggle = document.querySelector('[data-lighting-toggle]');
     const lightingControls = document.querySelector('[data-lighting-controls]');
     const lightingClose = document.querySelector('[data-lighting-close]');
+    const pageBody = document.body;
+    let lockedScrollPosition = 0;
 
     const applyLightingPanelState = (isOpen) => {
         if (!lightingControls) {
@@ -220,6 +222,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (lightingToggle) {
             lightingToggle.setAttribute('aria-expanded', String(isOpen));
+        }
+
+        if (pageBody) {
+            if (isOpen) {
+                lockedScrollPosition = window.scrollY || window.pageYOffset || 0;
+                pageBody.classList.add('lighting-panel-open');
+                pageBody.style.top = `-${lockedScrollPosition}px`;
+            } else {
+                pageBody.classList.remove('lighting-panel-open');
+                pageBody.style.removeProperty('top');
+                window.scrollTo(0, lockedScrollPosition);
+                lockedScrollPosition = 0;
+            }
         }
     };
 
