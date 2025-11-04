@@ -360,7 +360,7 @@ body.lighting-panel-open {
     top: auto;
     bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 24px);
     transform: translate(-50%, 20px);
-    max-height: min(70vh, 440px);
+    max-height: min(35vh, 280px);
   }
 
   .lighting-controls.is-visible {
