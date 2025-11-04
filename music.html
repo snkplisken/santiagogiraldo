@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minimal Portfolio & 3D Model Display</title>
+  <title>Minimal Portfolio &amp; 3D Model Display</title>
   <link rel="stylesheet" href="styles.css">
-  </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200&display=swap');
   </style>
-    <script src="script.js"></script>
+  <script src="script.js" defer></script>
+  <script src="music-player.js" defer></script>
 </head>
 <body>
   <header>
@@ -36,9 +36,77 @@
   <script src="webgl_2.js"></script>
   </header>
 
-  
-      </main>
-  
+  <main class="music-page" role="main">
+    <div class="music-page__content">
+      <h1 class="music-page__title">Sound Explorations</h1>
+      <p class="music-page__subtitle">Dive into evolving soundscapes crafted for immersive experiences.</p>
+    </div>
+  </main>
+
+  <script type="application/json" id="music-playlist">
+    [
+      {
+        "title": "soundsong",
+        "artist": "Santiago Giraldo",
+        "src": "media/first-light.mp3"
+      },
+      {
+        "title": "Chromatic Drift",
+        "artist": "Santiago Giraldo",
+        "src": "media/chromatic-drift.mp3"
+      },
+      {
+        "title": "Nocturnal Bloom",
+        "artist": "Santiago Giraldo",
+        "src": "media/nocturnal-bloom.mp3"
+      }
+    ]
+  </script>
+
+  <section class="music-player" id="musicPlayer" aria-label="Music player">
+    <div class="music-player__glass">
+      <div class="music-player__meta">
+        <span class="music-player__title" id="musicTitle">—</span>
+        <span class="music-player__artist" id="musicArtist">—</span>
+      </div>
+      <div class="music-player__controls" role="group" aria-label="Player controls">
+        <button class="music-player__button" data-action="back" aria-label="Previous track">
+          <svg class="music-player__icon music-player__icon--seek" aria-hidden="true" viewBox="0 0 40 40" focusable="false">
+            <path d="M21.5 7.5L9 20l12.5 12.5V7.5zM31 7.5L18.5 20 31 32.5V7.5z" />
+          </svg>
+        </button>
+        <button class="music-player__button" data-action="play" aria-label="Play">
+          <svg class="music-player__icon" aria-hidden="true" viewBox="0 0 40 40" focusable="false">
+            <path d="M15 9.5v21l16-10.5-16-10.5z" />
+          </svg>
+        </button>
+        <button class="music-player__button" data-action="pause" aria-label="Pause">
+          <svg class="music-player__icon" aria-hidden="true" viewBox="0 0 40 40" focusable="false">
+            <path d="M13.5 10h6v20h-6V10zm7.5 0h6v20h-6V10z" />
+          </svg>
+        </button>
+        <button class="music-player__button" data-action="stop" aria-label="Stop">
+          <svg class="music-player__icon" aria-hidden="true" viewBox="0 0 40 40" focusable="false">
+            <path d="M13 11h14v18H13z" />
+          </svg>
+        </button>
+        <button class="music-player__button" data-action="next" aria-label="Next track">
+          <svg class="music-player__icon music-player__icon--seek" aria-hidden="true" viewBox="0 0 40 40" focusable="false">
+            <path d="M18.5 7.5v25L31 20 18.5 7.5zm-9.5 0v25L21 20 9 7.5z" />
+          </svg>
+        </button>
+      </div>
+      <div class="music-player__progress" role="presentation">
+        <span class="music-player__time" id="musicCurrentTime">0:00</span>
+        <div class="music-player__bar" aria-hidden="true">
+          <div class="music-player__bar-fill" id="musicProgress"></div>
+        </div>
+        <span class="music-player__time" id="musicDuration">0:00</span>
+      </div>
+    </div>
+    <audio id="audioElement" preload="metadata"></audio>
+  </section>
+
       <footer>
         <div class="footer-content">
           <div id="clock" class="footer-clock">00:00:00</div>
