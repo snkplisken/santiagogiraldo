@@ -152,25 +152,34 @@ header {
   position: fixed;
   left: 24px;
   bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 72px);
-  padding: 10px 18px;
+  padding: 12px 22px;
   border-radius: 999px;
-  border: 2px solid #D2F059;
-  background: rgba(0, 0, 0, 0.65);
-  color: #D2F059;
+  border: 1px solid rgba(210, 240, 89, 0.35);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(210, 240, 89, 0.1));
+  color: rgba(11, 11, 21, 0.82);
   font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+  text-transform: uppercase;
+  font-weight: 600;
   z-index: 1002;
 }
 
 .lighting-toggle:hover,
 .lighting-toggle:focus-visible {
-  background: #D2F059;
-  color: #000;
+  background: linear-gradient(135deg, rgba(210, 240, 89, 0.35), rgba(120, 180, 255, 0.25));
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
   outline: none;
+  color: rgba(11, 11, 21, 0.85);
+}
+
+.lighting-toggle:active {
+  transform: translateY(0) scale(0.97);
 }
 
 .lighting-controls {
@@ -179,13 +188,13 @@ header {
   bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 140px);
   transform: translate(-50%, 20px);
   width: min(480px, 90vw);
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid rgba(210, 240, 89, 0.65);
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(8px);
-  color: #D2F059;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(210, 240, 89, 0.08));
+  border: 1px solid rgba(210, 240, 89, 0.4);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(22px) saturate(140%);
+  color: #0b0b15;
   max-height: min(75vh, 560px);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -216,27 +225,33 @@ header {
   margin: 0;
   font-size: 1.25rem;
   letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #D2F059;
 }
 
+
 .lighting-close {
-  background: none;
-  border: none;
-  color: #D2F059;
+  border: 1px solid rgba(210, 240, 89, 0.3);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05));
+  color: rgba(11, 11, 21, 0.7);
   font-size: 1.25rem;
   cursor: pointer;
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  backdrop-filter: blur(12px);
 }
 
 .lighting-close:hover,
 .lighting-close:focus-visible {
-  background: rgba(210, 240, 89, 0.15);
-  color: #fff;
+  background: radial-gradient(circle at 30% 30%, rgba(210, 240, 89, 0.55), rgba(120, 180, 255, 0.3));
+  color: #0b0b15;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
   outline: none;
 }
 
@@ -244,11 +259,17 @@ header {
   margin: 0 0 18px;
   font-size: 0.85rem;
   letter-spacing: 0.06em;
-  color: rgba(210, 240, 89, 0.8);
+  color: rgba(11, 11, 21, 0.55);
 }
 
 .lighting-controls__group {
   margin-bottom: 18px;
+  padding: 18px 18px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(210, 240, 89, 0.18);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.32), rgba(210, 240, 89, 0.12));
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(16px);
 }
 
 .lighting-controls__group:last-of-type {
@@ -260,6 +281,8 @@ header {
   font-size: 1rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: rgba(11, 11, 21, 0.7);
+  font-weight: 600;
 }
 
 .lighting-slider {
@@ -270,6 +293,7 @@ header {
   margin-bottom: 10px;
   font-size: 0.85rem;
   letter-spacing: 0.06em;
+  color: rgba(11, 11, 21, 0.72);
 }
 
 .lighting-slider:last-of-type {
@@ -284,16 +308,19 @@ header {
   margin-bottom: 0;
   font-size: 0.85rem;
   letter-spacing: 0.06em;
+  color: rgba(11, 11, 21, 0.72);
 }
 
 .lighting-color input[type="color"] {
   width: 100%;
-  height: 36px;
-  border: 1px solid rgba(210, 240, 89, 0.4);
-  border-radius: 8px;
-  background: rgba(210, 240, 89, 0.1);
+  height: 40px;
+  border: 1px solid rgba(210, 240, 89, 0.35);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(210, 240, 89, 0.08));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
   cursor: pointer;
   padding: 0;
+  backdrop-filter: blur(8px);
 }
 
 .lighting-slider input[type="range"] {
@@ -302,8 +329,9 @@ header {
   width: 100%;
   height: 6px;
   border-radius: 999px;
-  background: rgba(210, 240, 89, 0.3);
+  background: rgba(11, 11, 21, 0.12);
   outline: none;
+  box-shadow: inset 0 0 0 1px rgba(210, 240, 89, 0.2);
 }
 
 .lighting-slider input[type="range"]::-webkit-slider-thumb {
@@ -312,25 +340,36 @@ header {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #D2F059;
+  background: linear-gradient(135deg, rgba(210, 240, 89, 0.9), rgba(120, 180, 255, 0.85));
   border: none;
   cursor: pointer;
-  box-shadow: 0 0 0 3px rgba(210, 240, 89, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
 .lighting-slider input[type="range"]::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #D2F059;
+  background: linear-gradient(135deg, rgba(210, 240, 89, 0.9), rgba(120, 180, 255, 0.85));
   border: none;
   cursor: pointer;
-  box-shadow: 0 0 0 3px rgba(210, 240, 89, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
 .lighting-slider__value {
   text-align: right;
   font-variant-numeric: tabular-nums;
+  color: #0b0b15;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 6px 10px;
+  border: 1px solid rgba(210, 240, 89, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  backdrop-filter: blur(8px);
+  min-height: 32px;
 }
 
 body.lighting-panel-open {
@@ -356,6 +395,10 @@ body.lighting-panel-open {
     padding: 20px;
     bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 160px);
     max-height: min(70vh, 440px);
+  }
+
+  .lighting-controls__group {
+    padding: 16px 16px 12px;
   }
 
   .lighting-slider {
