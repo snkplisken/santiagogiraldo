@@ -90,12 +90,13 @@ document.addEventListener('DOMContentLoaded', function() {
         bodyElement.classList.remove('menu-open');
     }
 
-    const hamburgerMenu = document.querySelector('.hamburger-menu');
-    const navUl = document.querySelector('nav ul');
+    const pageHeader = document.querySelector('header');
+    const hamburgerMenu = pageHeader ? pageHeader.querySelector('.hamburger-menu') : null;
+    const navUl = pageHeader ? pageHeader.querySelector('nav ul') : null;
     if (navUl) {
         navUl.classList.remove('open');
     }
-    const closeMenuButton = document.querySelector('.menu-close');
+    const closeMenuButton = pageHeader ? pageHeader.querySelector('.menu-close') : null;
 
     const applyMenuState = (isOpen) => {
         if (!navUl) {
