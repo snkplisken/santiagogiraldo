@@ -189,15 +189,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(scrollText, 20); // Adjust speed as necessary
     }
 
-    // Hamburger Menu Functionality
-    const hamburgerMenu = document.querySelector('.hamburger-menu');
-    const navUl = document.querySelector('nav ul');
-    if (hamburgerMenu && navUl) {
-        hamburgerMenu.addEventListener('click', function() {
-            navUl.classList.toggle('open');
-        });
-    }
-
     // Footer Close Button Functionality
     const closeButton = document.getElementById('footerCloseButton');
     if (closeButton) {
