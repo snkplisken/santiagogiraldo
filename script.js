@@ -277,5 +277,69 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    const interactionHint = document.querySelector('[data-interaction-hint]');
+    if (interactionHint) {
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        const updateHintText = (queryEvent) => {
+            if (!queryEvent) {
+                return;
+            }
+            interactionHint.textContent = queryEvent.matches
+                ? 'Move the model with your finger'
+                : 'Move the model with your cursor';
+        };
+
+        const handleMediaChange = (event) => updateHintText(event);
+
+        updateHintText(mediaQuery);
+
+        if (mediaQuery.addEventListener) {
+            mediaQuery.addEventListener('change', handleMediaChange);
+        } else if (mediaQuery.addListener) {
+            mediaQuery.addListener(handleMediaChange);
+        }
+
+        const cleanupMediaListener = () => {
+            if (mediaQuery.removeEventListener) {
+                mediaQuery.removeEventListener('change', handleMediaChange);
+            } else if (mediaQuery.removeListener) {
+                mediaQuery.removeListener(handleMediaChange);
+            }
+        };
+
+        requestAnimationFrame(() => {
+            interactionHint.classList.add('is-visible');
+        });
+
+        const displayDuration = (() => {
+            const { hintDuration } = interactionHint.dataset;
+            const parsedDuration = hintDuration ? parseInt(hintDuration, 10) : NaN;
+            return Number.isFinite(parsedDuration) && parsedDuration >= 0 ? parsedDuration : 10000;
+        })();
+
+        let hideTimeoutId = null;
+
+        const removeHint = () => {
+            if (hideTimeoutId !== null) {
+                window.clearTimeout(hideTimeoutId);
+                hideTimeoutId = null;
+            }
+            cleanupMediaListener();
+            if (interactionHint.parentElement) {
+                interactionHint.parentElement.removeChild(interactionHint);
+            }
+        };
+
+        interactionHint.addEventListener('transitionend', (event) => {
+            if (event.propertyName === 'opacity' && interactionHint.classList.contains('is-fading')) {
+                removeHint();
+            }
+        });
+
+        hideTimeoutId = window.setTimeout(() => {
+            interactionHint.classList.add('is-fading');
+        }, displayDuration);
+    }
 });
 
