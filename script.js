@@ -312,7 +312,19 @@ document.addEventListener('DOMContentLoaded', function() {
             interactionHint.classList.add('is-visible');
         });
 
+        const displayDuration = (() => {
+            const { hintDuration } = interactionHint.dataset;
+            const parsedDuration = hintDuration ? parseInt(hintDuration, 10) : NaN;
+            return Number.isFinite(parsedDuration) && parsedDuration >= 0 ? parsedDuration : 10000;
+        })();
+
+        let hideTimeoutId = null;
+
         const removeHint = () => {
+            if (hideTimeoutId !== null) {
+                window.clearTimeout(hideTimeoutId);
+                hideTimeoutId = null;
+            }
             cleanupMediaListener();
             if (interactionHint.parentElement) {
                 interactionHint.parentElement.removeChild(interactionHint);
@@ -325,9 +337,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        window.setTimeout(() => {
+        hideTimeoutId = window.setTimeout(() => {
             interactionHint.classList.add('is-fading');
-        }, 10000);
+        }, displayDuration);
     }
 });
 
