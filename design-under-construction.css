@@ -1,0 +1,68 @@
+/* Under Construction page specific styling */
+body {
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 65%),
+    #050505;
+  color: #f8f8f8;
+}
+
+.under-construction {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 160px 2rem 120px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.under-construction__content {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+  max-width: 640px;
+}
+
+.under-construction__title {
+  font-size: clamp(2.25rem, 6vw, 5rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  color: #d2f059;
+}
+
+.under-construction__copy {
+  font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+  line-height: 1.6;
+  margin: 0 auto;
+  color: rgba(248, 248, 248, 0.82);
+}
+
+.under-construction__threejs {
+  position: absolute;
+  inset: 10% 8% 18%;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.under-construction__threejs canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 900px) {
+  .under-construction {
+    padding: 140px 1.5rem 100px;
+  }
+
+  .under-construction__threejs {
+    inset: 18% 4% 20%;
+  }
+}
+
+@media (max-width: 540px) {
+  .under-construction__threejs {
+    inset: 28% 2% 24%;
+  }
+}
