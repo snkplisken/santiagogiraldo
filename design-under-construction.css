@@ -67,3 +67,30 @@ body {
     font-size: clamp(1rem, 4vw, 1.25rem);
   }
 }
+
+/* Page-level scroll and interaction locking */
+html,
+body {
+  height: 100%;
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+
+main {
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.hero--under-construction .hero-model__canvas {
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.hero--under-construction .under-construction__content {
+  padding-top: 75vh; /* pushes it down 40% of the viewport height */
+}
+
+.hero--under-construction .under-construction__title {
+  font-size: clamp(1rem, 3vw, 2.5rem);
+  letter-spacing: 0.05em;
+}
