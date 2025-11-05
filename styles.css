@@ -1,7 +1,7 @@
 
 :root {
   --viewport-offset-bottom: 0px;
-  --footer-viewport-gap: 30px;
+  --footer-viewport-gap: 8px;
 }
 
 body, html {
@@ -23,7 +23,7 @@ body {
     env(safe-area-inset-bottom, 0px)
     + var(--viewport-offset-bottom, 0px)
     + var(--footer-viewport-gap, 0px)
-    + 40px
+    + 16px
   );
 }
 
@@ -161,7 +161,7 @@ header {
 .lighting-toggle {
   position: fixed;
   left: 24px;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 72px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 48px);
   padding: 10px 18px;
   border-radius: 999px;
   border: 2px solid #D2F059;
