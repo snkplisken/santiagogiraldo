@@ -1,6 +1,8 @@
 
 :root {
   --viewport-offset-bottom: 0px;
+  --footer-viewport-gap: 28px;
+  --instagram-footer-top: 72vh;
 }
 
 body, html {
@@ -15,6 +17,15 @@ body, html {
   background-position: center; /* Center the image in the viewport */
   background-repeat: no-repeat; /* Do not repeat the image */    color: #000000;
   overflow-x: hidden;
+}
+
+body {
+  padding-bottom: calc(
+    env(safe-area-inset-bottom, 0px)
+    + var(--viewport-offset-bottom, 0px)
+    + var(--footer-viewport-gap, 0px)
+    + 16px
+  );
 }
 
 canvas {
@@ -151,7 +162,7 @@ header {
 .lighting-toggle {
   position: fixed;
   left: 24px;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 72px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 48px);
   padding: 10px 18px;
   border-radius: 999px;
   border: 2px solid #D2F059;
@@ -416,7 +427,11 @@ footer {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 30px);
+  bottom: calc(
+    env(safe-area-inset-bottom, 0px)
+    + var(--viewport-offset-bottom, 0px)
+    + var(--footer-viewport-gap, 0px)
+  );
   margin-left: 10px; /* Adds 10px margin on the left */
   margin-right: 10px; /* Adds 10px margin on the right */
   background: #D2F059; /* Match the original footer color */
@@ -429,6 +444,29 @@ footer {
   border-radius: 10px; /* Rounded corners, adjust radius as needed */
   z-index: 1001;
   box-sizing: border-box;
+}
+
+:root.is-instagram-webview {
+  --footer-viewport-gap: 0px;
+}
+
+:root.is-instagram-webview body {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+
+:root.is-instagram-webview footer {
+  top: calc(env(safe-area-inset-top, 0px) + var(--instagram-footer-top, 72vh));
+  bottom: auto;
+}
+
+:root.is-instagram-webview .lighting-toggle {
+  top: calc(
+    env(safe-area-inset-top, 0px)
+    + var(--instagram-footer-top, 72vh)
+    - 72px
+  );
+  bottom: auto;
 }
 
 body.menu-open footer {

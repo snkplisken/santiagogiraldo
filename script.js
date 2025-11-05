@@ -1,25 +1,177 @@
 document.addEventListener('DOMContentLoaded', function() {
     const rootElement = document.documentElement;
+    if (!rootElement) {
+        return;
+    }
 
-    const updateViewportOffset = () => {
-        if (!window.visualViewport) {
-            rootElement.style.removeProperty('--viewport-offset-bottom');
+    const footerElement = document.querySelector('footer');
+    const isInstagramWebView = (() => {
+        const navigatorInfo = window.navigator || {};
+        const userAgent = (
+            navigatorInfo.userAgent ||
+            navigatorInfo.vendor ||
+            ''
+        ).toLowerCase();
+        return userAgent.includes('instagram');
+    })();
+
+    if (isInstagramWebView) {
+        rootElement.classList.add('is-instagram-webview');
+    }
+    let lastAppliedOffset = null;
+    let lastInstagramFooterTop = null;
+    let stabilizationHandle = null;
+    let stabilizationDeadline = 0;
+
+    const getNow = () => {
+        if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+            return performance.now();
+        }
+        return Date.now();
+    };
+
+    const updateInstagramLayout = () => {
+        if (!isInstagramWebView) {
             return;
         }
 
-        const viewport = window.visualViewport;
-        const viewportBottomSpace = Math.max(0, window.innerHeight - (viewport.height + viewport.offsetTop));
-        rootElement.style.setProperty('--viewport-offset-bottom', `${viewportBottomSpace}px`);
+        const viewportHeight = window.visualViewport
+            ? window.visualViewport.height
+            : window.innerHeight;
+
+        if (!viewportHeight) {
+            return;
+        }
+
+        const computedTop = Math.round(viewportHeight * 0.72);
+
+        if (lastInstagramFooterTop !== computedTop) {
+            lastInstagramFooterTop = computedTop;
+            rootElement.style.setProperty('--instagram-footer-top', `${computedTop}px`);
+        }
     };
 
-    updateViewportOffset();
+    const updateViewportOffset = () => {
+        if (isInstagramWebView) {
+            updateInstagramLayout();
+            if (lastAppliedOffset !== 0) {
+                lastAppliedOffset = 0;
+                rootElement.style.setProperty('--viewport-offset-bottom', '0px');
+            }
+            return 0;
+        }
 
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', updateViewportOffset);
-        window.visualViewport.addEventListener('scroll', updateViewportOffset);
+        let viewportBottomSpace = 0;
+
+        if (window.visualViewport) {
+            const viewport = window.visualViewport;
+            viewportBottomSpace = Math.max(
+                viewportBottomSpace,
+                Math.round(window.innerHeight - (viewport.height + viewport.offsetTop))
+            );
+        }
+
+        viewportBottomSpace = Math.max(
+            viewportBottomSpace,
+            Math.round(window.innerHeight - rootElement.clientHeight)
+        );
+
+        if (footerElement) {
+            const footerRect = footerElement.getBoundingClientRect();
+            const footerOverlap = Math.ceil(footerRect.bottom - window.innerHeight);
+            if (footerOverlap > 0) {
+                viewportBottomSpace = Math.max(viewportBottomSpace, footerOverlap);
+            }
+        }
+
+        const appliedOffset = Math.max(0, viewportBottomSpace);
+
+        if (lastAppliedOffset !== appliedOffset) {
+            lastAppliedOffset = appliedOffset;
+            rootElement.style.setProperty('--viewport-offset-bottom', `${appliedOffset}px`);
+        }
+
+        return appliedOffset;
+    };
+
+    const requestViewportStabilization = (durationMs = 600) => {
+        const now = getNow();
+        stabilizationDeadline = Math.max(stabilizationDeadline, now + durationMs);
+
+        if (stabilizationHandle) {
+            return;
+        }
+
+        const step = () => {
+            stabilizationHandle = null;
+            const currentTime = getNow();
+            updateViewportOffset();
+
+            if (currentTime < stabilizationDeadline) {
+                stabilizationHandle = requestAnimationFrame(step);
+            }
+        };
+
+        stabilizationHandle = requestAnimationFrame(step);
+    };
+
+    const handleViewportMutation = (durationMs = 600) => {
+        updateViewportOffset();
+        requestViewportStabilization(durationMs);
+    };
+
+    const handleInstagramMutation = (durationMs = 600) => {
+        if (!isInstagramWebView) {
+            return;
+        }
+
+        updateViewportOffset();
+        requestViewportStabilization(durationMs);
+    };
+
+    if (isInstagramWebView) {
+        handleInstagramMutation(1200);
+        setTimeout(() => handleInstagramMutation(1200), 120);
+        setTimeout(() => handleInstagramMutation(1200), 480);
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', handleInstagramMutation);
+            window.visualViewport.addEventListener('scroll', handleInstagramMutation);
+        }
+
+        window.addEventListener('resize', handleInstagramMutation);
+        window.addEventListener('orientationchange', handleInstagramMutation);
+        window.addEventListener('scroll', handleInstagramMutation, { passive: true });
+        window.addEventListener('load', () => handleInstagramMutation(1200));
+        window.addEventListener('pageshow', () => handleInstagramMutation(1200));
+        window.addEventListener('focus', () => handleInstagramMutation(1200));
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                handleInstagramMutation(1200);
+            }
+        });
+    } else {
+        handleViewportMutation(1200);
+        setTimeout(() => handleViewportMutation(1200), 120);
+        setTimeout(() => handleViewportMutation(1200), 480);
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', handleViewportMutation);
+            window.visualViewport.addEventListener('scroll', handleViewportMutation);
+        }
+
+        window.addEventListener('resize', handleViewportMutation);
+        window.addEventListener('orientationchange', handleViewportMutation);
+        window.addEventListener('scroll', handleViewportMutation, { passive: true });
+        window.addEventListener('load', () => handleViewportMutation(1200));
+        window.addEventListener('pageshow', () => handleViewportMutation(1200));
+        window.addEventListener('focus', () => handleViewportMutation(1200));
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                handleViewportMutation(1200);
+            }
+        });
     }
-
-    window.addEventListener('resize', updateViewportOffset);
 
     // Clock functionality
     const clockElement = document.getElementById('clock');
