@@ -47,11 +47,12 @@ main {
   text-align: center;
   max-width: 720px;
   pointer-events: auto;
+  padding-top: 75vh; /* pushes it down 40% of the viewport height */
 }
 
 .under-construction__title {
-  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
-  letter-spacing: 0.16em;
+  font-size: clamp(1rem, 3vw, 2.5rem);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   color: #d2f059;
