@@ -1,5 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     const rootElement = document.documentElement;
+    if (!rootElement) {
+        return;
+    }
+
+    const footerElement = document.querySelector('footer');
+    let lastAppliedOffset = null;
+    let stabilizationHandle = null;
+    let stabilizationDeadline = 0;
+
+    const getNow = () => {
+        if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+            return performance.now();
+        }
+        return Date.now();
+    };
 
     const updateViewportOffset = () => {
         let viewportBottomSpace = 0;
@@ -8,31 +23,79 @@ document.addEventListener('DOMContentLoaded', function() {
             const viewport = window.visualViewport;
             viewportBottomSpace = Math.max(
                 viewportBottomSpace,
-                window.innerHeight - (viewport.height + viewport.offsetTop)
+                Math.round(window.innerHeight - (viewport.height + viewport.offsetTop))
             );
         }
 
-        const docElement = document.documentElement;
-        if (docElement) {
-            viewportBottomSpace = Math.max(
-                viewportBottomSpace,
-                window.innerHeight - docElement.clientHeight
-            );
+        viewportBottomSpace = Math.max(
+            viewportBottomSpace,
+            Math.round(window.innerHeight - rootElement.clientHeight)
+        );
+
+        if (footerElement) {
+            const footerRect = footerElement.getBoundingClientRect();
+            const footerOverlap = Math.ceil(footerRect.bottom - window.innerHeight);
+            if (footerOverlap > 0) {
+                viewportBottomSpace = Math.max(viewportBottomSpace, footerOverlap);
+            }
         }
 
-        rootElement.style.setProperty('--viewport-offset-bottom', `${Math.max(0, viewportBottomSpace)}px`);
+        const appliedOffset = Math.max(0, viewportBottomSpace);
+
+        if (lastAppliedOffset !== appliedOffset) {
+            lastAppliedOffset = appliedOffset;
+            rootElement.style.setProperty('--viewport-offset-bottom', `${appliedOffset}px`);
+        }
+
+        return appliedOffset;
     };
 
-    updateViewportOffset();
+    const requestViewportStabilization = (durationMs = 600) => {
+        const now = getNow();
+        stabilizationDeadline = Math.max(stabilizationDeadline, now + durationMs);
+
+        if (stabilizationHandle) {
+            return;
+        }
+
+        const step = () => {
+            stabilizationHandle = null;
+            const currentTime = getNow();
+            updateViewportOffset();
+
+            if (currentTime < stabilizationDeadline) {
+                stabilizationHandle = requestAnimationFrame(step);
+            }
+        };
+
+        stabilizationHandle = requestAnimationFrame(step);
+    };
+
+    const handleViewportMutation = (durationMs = 600) => {
+        updateViewportOffset();
+        requestViewportStabilization(durationMs);
+    };
+
+    handleViewportMutation(1200);
+    setTimeout(() => handleViewportMutation(1200), 120);
+    setTimeout(() => handleViewportMutation(1200), 480);
 
     if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', updateViewportOffset);
-        window.visualViewport.addEventListener('scroll', updateViewportOffset);
+        window.visualViewport.addEventListener('resize', handleViewportMutation);
+        window.visualViewport.addEventListener('scroll', handleViewportMutation);
     }
 
-    window.addEventListener('resize', updateViewportOffset);
-    window.addEventListener('orientationchange', updateViewportOffset);
-    window.addEventListener('scroll', updateViewportOffset, { passive: true });
+    window.addEventListener('resize', handleViewportMutation);
+    window.addEventListener('orientationchange', handleViewportMutation);
+    window.addEventListener('scroll', handleViewportMutation, { passive: true });
+    window.addEventListener('load', () => handleViewportMutation(1200));
+    window.addEventListener('pageshow', () => handleViewportMutation(1200));
+    window.addEventListener('focus', () => handleViewportMutation(1200));
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            handleViewportMutation(1200);
+        }
+    });
 
     // Clock functionality
     const clockElement = document.getElementById('clock');
