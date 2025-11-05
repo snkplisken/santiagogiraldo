@@ -5,6 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const footerElement = document.querySelector('footer');
+    const isInstagramWebView = (() => {
+        const navigatorInfo = window.navigator || {};
+        const userAgent = (
+            navigatorInfo.userAgent ||
+            navigatorInfo.vendor ||
+            ''
+        ).toLowerCase();
+        return userAgent.includes('instagram');
+    })();
+
+    if (isInstagramWebView) {
+        rootElement.classList.add('is-instagram-webview');
+    }
     let lastAppliedOffset = null;
     let stabilizationHandle = null;
     let stabilizationDeadline = 0;
@@ -17,6 +30,14 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const updateViewportOffset = () => {
+        if (isInstagramWebView) {
+            if (lastAppliedOffset !== 0) {
+                lastAppliedOffset = 0;
+                rootElement.style.setProperty('--viewport-offset-bottom', '0px');
+            }
+            return 0;
+        }
+
         let viewportBottomSpace = 0;
 
         if (window.visualViewport) {
@@ -76,26 +97,30 @@ document.addEventListener('DOMContentLoaded', function() {
         requestViewportStabilization(durationMs);
     };
 
-    handleViewportMutation(1200);
-    setTimeout(() => handleViewportMutation(1200), 120);
-    setTimeout(() => handleViewportMutation(1200), 480);
+    if (isInstagramWebView) {
+        updateViewportOffset();
+    } else {
+        handleViewportMutation(1200);
+        setTimeout(() => handleViewportMutation(1200), 120);
+        setTimeout(() => handleViewportMutation(1200), 480);
 
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', handleViewportMutation);
-        window.visualViewport.addEventListener('scroll', handleViewportMutation);
-    }
-
-    window.addEventListener('resize', handleViewportMutation);
-    window.addEventListener('orientationchange', handleViewportMutation);
-    window.addEventListener('scroll', handleViewportMutation, { passive: true });
-    window.addEventListener('load', () => handleViewportMutation(1200));
-    window.addEventListener('pageshow', () => handleViewportMutation(1200));
-    window.addEventListener('focus', () => handleViewportMutation(1200));
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            handleViewportMutation(1200);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', handleViewportMutation);
+            window.visualViewport.addEventListener('scroll', handleViewportMutation);
         }
-    });
+
+        window.addEventListener('resize', handleViewportMutation);
+        window.addEventListener('orientationchange', handleViewportMutation);
+        window.addEventListener('scroll', handleViewportMutation, { passive: true });
+        window.addEventListener('load', () => handleViewportMutation(1200));
+        window.addEventListener('pageshow', () => handleViewportMutation(1200));
+        window.addEventListener('focus', () => handleViewportMutation(1200));
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                handleViewportMutation(1200);
+            }
+        });
+    }
 
     // Clock functionality
     const clockElement = document.getElementById('clock');
