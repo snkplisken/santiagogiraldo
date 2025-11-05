@@ -1,8 +1,8 @@
 
 :root {
   --viewport-offset-bottom: 0px;
-  --footer-viewport-gap: 8px;
-  --instagram-footer-top: 45vh;
+  --footer-viewport-gap: 16px;
+  --instagram-footer-top: 42vh;
 }
 
 body, html {
@@ -451,23 +451,19 @@ footer {
 }
 
 :root.is-instagram-webview body {
-  padding-top: calc(
-    env(safe-area-inset-top, 0px)
-    + var(--instagram-footer-top, 45vh)
-    + 64px
-  );
-  padding-bottom: 24px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
 }
 
 :root.is-instagram-webview footer {
-  top: calc(env(safe-area-inset-top, 0px) + var(--instagram-footer-top, 45vh));
+  top: calc(env(safe-area-inset-top, 0px) + var(--instagram-footer-top, 42vh));
   bottom: auto;
 }
 
 :root.is-instagram-webview .lighting-toggle {
   top: calc(
     env(safe-area-inset-top, 0px)
-    + var(--instagram-footer-top, 45vh)
+    + var(--instagram-footer-top, 42vh)
     - 72px
   );
   bottom: auto;

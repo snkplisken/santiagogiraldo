@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const computedTop = Math.round(viewportHeight * 0.45);
+        const computedTop = Math.round(viewportHeight * 0.42);
 
         if (lastInstagramFooterTop !== computedTop) {
             lastInstagramFooterTop = computedTop;
