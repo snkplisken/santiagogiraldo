@@ -48,6 +48,8 @@ const container = resolveContainer();
 
 // Three.js Scene Setup
 const scene = new THREE.Scene();
+const clock = new THREE.Clock();
+let mixer = null;
 
 const getContainerSize = () => {
     if (!container) {
@@ -137,6 +139,21 @@ function loadModel(url) {
         setupModel(model);
         scene.add(model);
 
+        if (mixer) {
+            mixer.stopAllAction();
+        }
+
+        if (gltf.animations?.length) {
+            mixer = new THREE.AnimationMixer(model);
+            gltf.animations.forEach((clip) => {
+                const action = mixer.clipAction(clip);
+                action.reset();
+                action.play();
+            });
+        } else {
+            mixer = null;
+        }
+
         // Make the camera look at the model
         camera.lookAt(model.position);
     }, undefined, function (error) {
@@ -156,6 +173,10 @@ function setCameraZoom() {
 
 function animate() {
     requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+    if (mixer) {
+        mixer.update(delta);
+    }
     setCameraZoom(); // Update zoom level based on window width
     controls.update();
     renderer.render(scene, camera);
@@ -202,6 +223,66 @@ document.addEventListener('DOMContentLoaded', function() {
     const lightingClose = document.querySelector('[data-lighting-close]');
     const pageBody = document.body;
     let lockedScrollPosition = 0;
+
+    const underConstructionHero = document.querySelector('.hero--under-construction');
+
+    if (underConstructionHero) {
+        let lastTouchEnd = 0;
+
+        const isHeroEvent = (event) => {
+            const primaryTarget = event.target;
+            if (primaryTarget instanceof Node && underConstructionHero.contains(primaryTarget)) {
+                return true;
+            }
+
+            if ('touches' in event && event.touches) {
+                return Array.from(event.touches).some((touch) => {
+                    const touchTarget = touch.target;
+                    return touchTarget instanceof Node && underConstructionHero.contains(touchTarget);
+                });
+            }
+
+            return false;
+        };
+
+        const preventMultiTouch = (event) => {
+            if (event.touches && event.touches.length > 1 && isHeroEvent(event)) {
+                event.preventDefault();
+            }
+        };
+
+        const preventWheelZoom = (event) => {
+            if (event.ctrlKey && isHeroEvent(event)) {
+                event.preventDefault();
+            }
+        };
+
+        const preventDoubleTapZoom = (event) => {
+            if (!isHeroEvent(event)) {
+                return;
+            }
+
+            const currentTime = Date.now();
+            if (currentTime - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = currentTime;
+        };
+
+        const preventGesture = (event) => {
+            if (isHeroEvent(event)) {
+                event.preventDefault();
+            }
+        };
+
+        document.addEventListener('touchstart', preventMultiTouch, { passive: false });
+        document.addEventListener('touchmove', preventMultiTouch, { passive: false });
+        document.addEventListener('touchend', preventDoubleTapZoom, { passive: false });
+        window.addEventListener('wheel', preventWheelZoom, { passive: false });
+        document.addEventListener('gesturestart', preventGesture);
+        document.addEventListener('gesturechange', preventGesture);
+        document.addEventListener('gestureend', preventGesture);
+    }
 
     const applyLightingPanelState = (isOpen) => {
         if (!lightingControls) {

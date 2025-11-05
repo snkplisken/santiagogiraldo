@@ -1,0 +1,99 @@
+/* Under Construction page specific styling */
+body {
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 65%), #050505;
+  color: #f8f8f8;
+}
+
+.hero--under-construction {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 1.5rem;
+}
+
+.hero--under-construction .hero-model {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero--under-construction .hero-model__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.under-construction__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 720px;
+  pointer-events: auto;
+  padding-top: 75vh; /* pushes it down 40% of the viewport height */
+
+}
+
+.under-construction__title {
+  font-size: clamp(1rem, 3vw, 2.5rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  color: #d2f059;
+  text-shadow: 0 12px 48px rgba(0, 0, 0, 0.65);
+  font-weight: 900;
+}
+
+.under-construction__copy {
+  font-size: clamp(1.05rem, 2.2vw, 1.6rem);
+  line-height: 1.7;
+  margin: 0 auto;
+  color: rgba(248, 248, 248, 0.85);
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 900px) {
+  .hero--under-construction {
+    padding: 0 1rem;
+  }
+
+  .under-construction__title {
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 600px) {
+  .under-construction__copy {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+}
+
+/* Page-level scroll and interaction locking */
+html,
+body {
+  height: 100%;
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+
+main {
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.hero--under-construction .hero-model__canvas {
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.hero--under-construction .under-construction__content {
+  padding-top: 75vh; /* pushes it down 40% of the viewport height */
+}
+
+.hero--under-construction .under-construction__title {
+  font-size: clamp(1rem, 3vw, 2.5rem);
+  letter-spacing: 0.05em;
+}
