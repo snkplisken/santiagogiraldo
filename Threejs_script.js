@@ -19,6 +19,7 @@ const DEFAULT_MODEL_URL = 'SantiagoLogo.glb';
 const DEFAULT_CONTAINER_ID = 'threejs-container';
 const DEFAULT_MODEL_POSITION = [-0.35, 0, -0.5];
 const DEFAULT_MODEL_ROTATION = [-0.25, 0, 0];
+const DEFAULT_CAMERA_POSITION = [0, 4, 8];
 
 const parseVector = (value, fallback) => {
     if (!value) {
@@ -31,6 +32,19 @@ const parseVector = (value, fallback) => {
         .filter((number) => !Number.isNaN(number));
 
     return parsed.length === fallback.length ? parsed : fallback;
+};
+
+const parseOptionalVector = (value, expectedLength = 3) => {
+    if (!value) {
+        return null;
+    }
+
+    const parsed = value
+        .split(',')
+        .map((segment) => Number.parseFloat(segment.trim()))
+        .filter((number) => !Number.isNaN(number));
+
+    return parsed.length === expectedLength ? parsed : null;
 };
 
 const resolveContainer = () => {
@@ -66,7 +80,10 @@ const getContainerSize = () => {
 const { width: initialWidth, height: initialHeight } = getContainerSize();
 
 const camera = new THREE.PerspectiveCamera(75, initialWidth / initialHeight, 0.1, 1000);
-camera.position.set(0, 4, 8);
+const cameraPosition = parseVector(scriptDataset.cameraPosition, DEFAULT_CAMERA_POSITION);
+const cameraTargetVector = parseOptionalVector(scriptDataset.cameraTarget);
+const explicitCameraTarget = cameraTargetVector ? new THREE.Vector3(...cameraTargetVector) : null;
+camera.position.set(...cameraPosition);
 
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setClearColor(0x000000, 0); // Transparent background
@@ -154,14 +171,23 @@ function loadModel(url) {
             mixer = null;
         }
 
-        // Make the camera look at the model
-        camera.lookAt(model.position);
+        // Make the camera look at the configured target or the model
+        const target = explicitCameraTarget ?? model.position;
+        camera.lookAt(target);
+        controls.target.copy(target);
+        controls.update();
     }, undefined, function (error) {
         console.error('An error happened while loading the model:', error);
     });
 }
 
 const controls = new OrbitControls(camera, renderer.domElement);
+
+if (explicitCameraTarget) {
+    camera.lookAt(explicitCameraTarget);
+    controls.target.copy(explicitCameraTarget);
+    controls.update();
+}
 
 // Function to control camera zoom based on window width
 function setCameraZoom() {
