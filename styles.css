@@ -1,6 +1,7 @@
 
 :root {
   --viewport-offset-bottom: 0px;
+  --footer-viewport-gap: 30px;
 }
 
 body, html {
@@ -15,6 +16,15 @@ body, html {
   background-position: center; /* Center the image in the viewport */
   background-repeat: no-repeat; /* Do not repeat the image */    color: #000000;
   overflow-x: hidden;
+}
+
+body {
+  padding-bottom: calc(
+    env(safe-area-inset-bottom, 0px)
+    + var(--viewport-offset-bottom, 0px)
+    + var(--footer-viewport-gap, 0px)
+    + 40px
+  );
 }
 
 canvas {
@@ -416,7 +426,11 @@ footer {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 30px);
+  bottom: calc(
+    env(safe-area-inset-bottom, 0px)
+    + var(--viewport-offset-bottom, 0px)
+    + var(--footer-viewport-gap, 0px)
+  );
   margin-left: 10px; /* Adds 10px margin on the left */
   margin-right: 10px; /* Adds 10px margin on the right */
   background: #D2F059; /* Match the original footer color */

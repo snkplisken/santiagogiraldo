@@ -2,14 +2,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const rootElement = document.documentElement;
 
     const updateViewportOffset = () => {
-        if (!window.visualViewport) {
-            rootElement.style.removeProperty('--viewport-offset-bottom');
-            return;
+        let viewportBottomSpace = 0;
+
+        if (window.visualViewport) {
+            const viewport = window.visualViewport;
+            viewportBottomSpace = Math.max(
+                viewportBottomSpace,
+                window.innerHeight - (viewport.height + viewport.offsetTop)
+            );
         }
 
-        const viewport = window.visualViewport;
-        const viewportBottomSpace = Math.max(0, window.innerHeight - (viewport.height + viewport.offsetTop));
-        rootElement.style.setProperty('--viewport-offset-bottom', `${viewportBottomSpace}px`);
+        const docElement = document.documentElement;
+        if (docElement) {
+            viewportBottomSpace = Math.max(
+                viewportBottomSpace,
+                window.innerHeight - docElement.clientHeight
+            );
+        }
+
+        rootElement.style.setProperty('--viewport-offset-bottom', `${Math.max(0, viewportBottomSpace)}px`);
     };
 
     updateViewportOffset();
@@ -20,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     window.addEventListener('resize', updateViewportOffset);
+    window.addEventListener('orientationchange', updateViewportOffset);
+    window.addEventListener('scroll', updateViewportOffset, { passive: true });
 
     // Clock functionality
     const clockElement = document.getElementById('clock');
