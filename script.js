@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rootElement.classList.add('is-instagram-webview');
     }
     let lastAppliedOffset = null;
+    let lastInstagramFooterTop = null;
     let stabilizationHandle = null;
     let stabilizationDeadline = 0;
 
@@ -29,8 +30,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return Date.now();
     };
 
+    const updateInstagramLayout = () => {
+        if (!isInstagramWebView) {
+            return;
+        }
+
+        const viewportHeight = window.visualViewport
+            ? window.visualViewport.height
+            : window.innerHeight;
+
+        if (!viewportHeight) {
+            return;
+        }
+
+        const computedTop = Math.round(viewportHeight * 0.45);
+
+        if (lastInstagramFooterTop !== computedTop) {
+            lastInstagramFooterTop = computedTop;
+            rootElement.style.setProperty('--instagram-footer-top', `${computedTop}px`);
+        }
+    };
+
     const updateViewportOffset = () => {
         if (isInstagramWebView) {
+            updateInstagramLayout();
             if (lastAppliedOffset !== 0) {
                 lastAppliedOffset = 0;
                 rootElement.style.setProperty('--viewport-offset-bottom', '0px');
@@ -97,8 +120,36 @@ document.addEventListener('DOMContentLoaded', function() {
         requestViewportStabilization(durationMs);
     };
 
-    if (isInstagramWebView) {
+    const handleInstagramMutation = (durationMs = 600) => {
+        if (!isInstagramWebView) {
+            return;
+        }
+
         updateViewportOffset();
+        requestViewportStabilization(durationMs);
+    };
+
+    if (isInstagramWebView) {
+        handleInstagramMutation(1200);
+        setTimeout(() => handleInstagramMutation(1200), 120);
+        setTimeout(() => handleInstagramMutation(1200), 480);
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', handleInstagramMutation);
+            window.visualViewport.addEventListener('scroll', handleInstagramMutation);
+        }
+
+        window.addEventListener('resize', handleInstagramMutation);
+        window.addEventListener('orientationchange', handleInstagramMutation);
+        window.addEventListener('scroll', handleInstagramMutation, { passive: true });
+        window.addEventListener('load', () => handleInstagramMutation(1200));
+        window.addEventListener('pageshow', () => handleInstagramMutation(1200));
+        window.addEventListener('focus', () => handleInstagramMutation(1200));
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                handleInstagramMutation(1200);
+            }
+        });
     } else {
         handleViewportMutation(1200);
         setTimeout(() => handleViewportMutation(1200), 120);
