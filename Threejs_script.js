@@ -48,6 +48,8 @@ const container = resolveContainer();
 
 // Three.js Scene Setup
 const scene = new THREE.Scene();
+const clock = new THREE.Clock();
+let mixer = null;
 
 const getContainerSize = () => {
     if (!container) {
@@ -137,6 +139,21 @@ function loadModel(url) {
         setupModel(model);
         scene.add(model);
 
+        if (mixer) {
+            mixer.stopAllAction();
+        }
+
+        if (gltf.animations?.length) {
+            mixer = new THREE.AnimationMixer(model);
+            gltf.animations.forEach((clip) => {
+                const action = mixer.clipAction(clip);
+                action.reset();
+                action.play();
+            });
+        } else {
+            mixer = null;
+        }
+
         // Make the camera look at the model
         camera.lookAt(model.position);
     }, undefined, function (error) {
@@ -156,6 +173,10 @@ function setCameraZoom() {
 
 function animate() {
     requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+    if (mixer) {
+        mixer.update(delta);
+    }
     setCameraZoom(); // Update zoom level based on window width
     controls.update();
     renderer.render(scene, camera);
