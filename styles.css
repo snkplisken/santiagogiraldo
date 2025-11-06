@@ -448,6 +448,7 @@ footer {
 
 :root.is-instagram-webview {
   --footer-viewport-gap: 0px;
+  --music-player-instagram-gap: clamp(16px, 4vw, 28px);
 }
 
 :root.is-instagram-webview body {
@@ -981,6 +982,18 @@ body.menu-open .music-player__glass {
 
   .music-player__button {
     --player-control-size: 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root.is-instagram-webview .music-body .music-player {
+    top: calc(
+      env(safe-area-inset-top, 0px)
+      + var(--instagram-footer-top, 72vh)
+      - var(--music-player-instagram-gap, 20px)
+    );
+    bottom: auto;
+    transform: translate(-50%, -100%);
   }
 }
 
