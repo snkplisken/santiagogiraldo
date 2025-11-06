@@ -442,7 +442,7 @@ footer {
   border-left: 2px solid #D2F059;
   border-right: 2px solid #D2F059;
   border-radius: 10px; /* Rounded corners, adjust radius as needed */
-  z-index: 1001;
+  z-index: 900;
   box-sizing: border-box;
 }
 
@@ -454,10 +454,10 @@ footer {
     env(safe-area-inset-bottom, 0px)
     + var(--viewport-offset-bottom, 0px)
     + var(--footer-viewport-gap, 0px)
-    + 80px
+    + 40px
   );
   width: min(720px, 92vw);
-  z-index: 1001;
+  z-index: 950;
   pointer-events: none;
 }
 
@@ -573,7 +573,7 @@ footer {
       env(safe-area-inset-bottom, 0px)
       + var(--viewport-offset-bottom, 0px)
       + var(--footer-viewport-gap, 0px)
-      + 120px
+      + 60px
     );
   }
 
