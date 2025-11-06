@@ -461,6 +461,10 @@ footer {
   bottom: auto;
 }
 
+:root.is-instagram-mobile-webview footer {
+  position: absolute;
+}
+
 :root.is-instagram-webview .lighting-toggle {
   top: calc(
     env(safe-area-inset-top, 0px)

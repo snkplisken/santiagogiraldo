@@ -5,23 +5,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const footerElement = document.querySelector('footer');
-    const isInstagramWebView = (() => {
-        const navigatorInfo = window.navigator || {};
-        const userAgent = (
-            navigatorInfo.userAgent ||
-            navigatorInfo.vendor ||
-            ''
-        ).toLowerCase();
-        return userAgent.includes('instagram');
-    })();
+    const navigatorInfo = window.navigator || {};
+    const normalizedUserAgent = (
+        navigatorInfo.userAgent ||
+        navigatorInfo.vendor ||
+        ''
+    ).toLowerCase();
+    const isInstagramWebView = normalizedUserAgent.includes('instagram');
+    const isInstagramMobileWebView = isInstagramWebView
+        && /iphone|ipad|ipod|android|windows phone|blackberry/.test(normalizedUserAgent);
 
     if (isInstagramWebView) {
         rootElement.classList.add('is-instagram-webview');
+    }
+    if (isInstagramMobileWebView) {
+        rootElement.classList.add('is-instagram-mobile-webview');
     }
     let lastAppliedOffset = null;
     let lastInstagramFooterTop = null;
     let stabilizationHandle = null;
     let stabilizationDeadline = 0;
+    let instagramFooterLockActivated = false;
+    let lastInstagramAbsoluteTop = null;
 
     const getNow = () => {
         if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
@@ -32,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const updateInstagramLayout = () => {
         if (!isInstagramWebView) {
-            return;
+            return null;
         }
 
         const viewportHeight = window.visualViewport
@@ -40,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             : window.innerHeight;
 
         if (!viewportHeight) {
-            return;
+            return null;
         }
 
         const computedTop = Math.round(viewportHeight * 0.72);
@@ -49,11 +54,69 @@ document.addEventListener('DOMContentLoaded', function() {
             lastInstagramFooterTop = computedTop;
             rootElement.style.setProperty('--instagram-footer-top', `${computedTop}px`);
         }
+
+        return computedTop;
+    };
+
+    const getScrollTop = () => {
+        if (typeof window.scrollY === 'number') {
+            return window.scrollY;
+        }
+
+        if (typeof window.pageYOffset === 'number') {
+            return window.pageYOffset;
+        }
+
+        const scrollingElement = document.scrollingElement || document.documentElement || document.body;
+        if (scrollingElement && typeof scrollingElement.scrollTop === 'number') {
+            return scrollingElement.scrollTop;
+        }
+
+        return 0;
+    };
+
+    const updateInstagramFooterLock = (instagramViewportOffset) => {
+        if (!isInstagramMobileWebView || !footerElement) {
+            return;
+        }
+
+        const viewport = window.visualViewport;
+        const viewportHeight = viewport ? viewport.height : window.innerHeight;
+        const viewportOffsetTop = viewport ? viewport.offsetTop : 0;
+
+        const baseOffset = (() => {
+            if (typeof instagramViewportOffset === 'number') {
+                return instagramViewportOffset;
+            }
+            if (viewportHeight) {
+                return Math.round(viewportHeight * 0.72);
+            }
+            return null;
+        })();
+
+        if (baseOffset === null) {
+            return;
+        }
+
+        const scrollTop = getScrollTop();
+        const absoluteTop = Math.round(scrollTop + viewportOffsetTop + baseOffset);
+
+        if (!instagramFooterLockActivated) {
+            instagramFooterLockActivated = true;
+            footerElement.style.position = 'absolute';
+            footerElement.style.bottom = 'auto';
+        }
+
+        if (lastInstagramAbsoluteTop !== absoluteTop) {
+            lastInstagramAbsoluteTop = absoluteTop;
+            footerElement.style.top = `${absoluteTop}px`;
+        }
     };
 
     const updateViewportOffset = () => {
         if (isInstagramWebView) {
-            updateInstagramLayout();
+            const instagramViewportOffset = updateInstagramLayout();
+            updateInstagramFooterLock(instagramViewportOffset);
             if (lastAppliedOffset !== 0) {
                 lastAppliedOffset = 0;
                 rootElement.style.setProperty('--viewport-offset-bottom', '0px');
