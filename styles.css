@@ -602,11 +602,21 @@ footer {
 :root.is-instagram-webview {
   --footer-viewport-gap: 0px;
   --music-player-instagram-gap: clamp(16px, 4vw, 28px);
+  --project-launcher-instagram-gap: clamp(28px, 5vw, 44px);
 }
 
 :root.is-instagram-webview body {
   padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+
+:root.is-instagram-webview .project-launcher {
+  top: var(--instagram-footer-top, 72vh);
+  bottom: auto;
+  transform: translate(
+    -50%,
+    calc(-100% - var(--project-launcher-instagram-gap, 40px))
+  );
 }
 
 :root.is-instagram-webview footer {
