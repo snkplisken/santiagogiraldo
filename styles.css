@@ -750,43 +750,6 @@ body.menu-open footer {
 
 
 
-.music-page {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 160px 2rem 220px;
-  box-sizing: border-box;
-  text-align: center;
-  color: #D2F059;
-  z-index: 1;
-}
-
-.music-page__content {
-  max-width: 640px;
-  background: rgba(0, 0, 0, 0.45);
-  border-radius: 24px;
-  padding: clamp(1.5rem, 4vw, 3rem);
-  border: 1px solid rgba(210, 240, 89, 0.2);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
-}
-
-.music-page__title {
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  letter-spacing: 0.1em;
-  margin: 0 0 1rem;
-  text-transform: uppercase;
-}
-
-.music-page__subtitle {
-  margin: 0;
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
-  line-height: 1.7;
-  letter-spacing: 0.08em;
-}
-
 .music-player {
   position: fixed;
   left: 50%;
@@ -971,10 +934,6 @@ body.menu-open .music-player__glass {
 }
 
 @media (max-width: 768px) {
-  .music-page {
-    padding: 140px 1.5rem 200px;
-  }
-
   .music-player {
     bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 100px);
     width: 95vw;
