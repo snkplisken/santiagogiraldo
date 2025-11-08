@@ -21,89 +21,59 @@
       color: #D2F059;
     }
 
-    .hero-layout {
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      gap: clamp(16px, 4vw, 32px);
-      padding: clamp(16px, 4vw, 32px);
+    .hero {
+      position: relative;
+      width: 100%;
       min-height: 100vh;
-      box-sizing: border-box;
-    }
-
-    .model-sidebar {
-      width: clamp(220px, 25vw, 320px);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      padding: clamp(18px, 4vw, 28px);
-      border-radius: 18px;
-      border: 1px solid rgba(210, 240, 89, 0.35);
-      background: rgba(8, 8, 8, 0.75);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
-      color: #D2F059;
-      max-height: calc(100vh - clamp(32px, 8vw, 64px));
       overflow: hidden;
     }
 
-    .model-sidebar__title {
-      margin: 0;
-      font-size: 1.15rem;
-      letter-spacing: 0.08em;
+    .hero-model {
+      position: relative;
+      width: 100%;
+      height: 100vh;
     }
 
-    .model-sidebar__hint {
-      margin: 0;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: rgba(210, 240, 89, 0.7);
+    .hero-model__canvas,
+    #threejs-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
     }
 
-    .model-sidebar__list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    #threejs-container canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .model-selector {
+      position: absolute;
+      top: 50%;
+      left: clamp(16px, 5vw, 64px);
+      transform: translateY(-50%);
       display: flex;
       flex-direction: column;
       gap: 12px;
-      flex: 1 1 auto;
-      min-height: 0;
-      overflow-y: auto;
-      padding-right: 6px;
+      pointer-events: none;
+      z-index: 2;
     }
 
     .model-option {
-      width: 100%;
-      display: block;
-      padding: 12px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(210, 240, 89, 0.35);
-      background: rgba(0, 0, 0, 0.4);
-      color: #D2F059;
+      pointer-events: auto;
+      background: none;
+      border: none;
+      color: #ffffff;
       font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      letter-spacing: 0.06em;
+      font-size: 1rem;
       text-align: left;
       cursor: pointer;
-      transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
-    }
-
-    .model-option:hover,
-    .model-option:focus-visible {
-      border-color: #D2F059;
-      background: rgba(210, 240, 89, 0.2);
-      outline: none;
-      transform: translateX(4px);
+      padding: 0;
     }
 
     .model-option.is-active,
     .model-option[aria-pressed="true"] {
-      background: rgba(210, 240, 89, 0.35);
-      color: #000;
-      border-color: #D2F059;
-      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+      text-decoration: underline;
     }
 
     .model-option[data-loading="true"] {
@@ -111,32 +81,17 @@
       cursor: progress;
     }
 
-    .hero-layout .hero-model {
-      flex: 1 1 auto;
-      width: auto;
-      height: 100vh;
-      min-height: 60vh;
-      border-radius: 18px;
-      overflow: hidden;
-      position: relative;
-      background: rgba(0, 0, 0, 0.65);
-    }
-
-    @media (max-width: 900px) {
-      .hero-layout {
-        flex-direction: column;
-        padding: clamp(12px, 6vw, 20px);
+    @media (max-width: 720px) {
+      .model-selector {
+        top: auto;
+        bottom: clamp(16px, 5vw, 48px);
+        left: 50%;
+        transform: translate(-50%, 0);
+        align-items: center;
       }
 
-      .model-sidebar {
-        width: 100%;
-        max-height: none;
-        order: -1;
-      }
-
-      .hero-layout .hero-model {
-        width: 100%;
-        height: 70vh;
+      .model-option {
+        text-align: center;
       }
     }
   </style>
@@ -167,32 +122,19 @@
 
   <main>
     <section class="hero">
-      <div class="hero-layout">
-        <aside class="model-sidebar">
-          <h2 class="model-sidebar__title">Environment Assets</h2>
-          <p class="model-sidebar__hint">Browse different scenes without loading them all at once. Pick a model to stream it into the viewer.</p>
-          <ul class="model-sidebar__list" data-model-list>
-            <li>
-              <button type="button" class="model-option" data-model-url="city.glb" data-model-scale="0.02,0.02,0.02" data-model-position="0,-1,0">City Block</button>
-            </li>
-            <li>
-              <button type="button" class="model-option" data-model-url="construction.glb" data-model-scale="0.015,0.015,0.015" data-model-position="0,-1,0">Construction Site</button>
-            </li>
-            <li>
-              <button type="button" class="model-option" data-model-url="ramp.glb" data-model-scale="1.2,1.2,1.2" data-model-position="0,-0.5,0">Skate Ramp</button>
-            </li>
-            <li>
-              <button type="button" class="model-option" data-model-url="SantiagoLogo.glb">Santiago Logo</button>
-            </li>
-          </ul>
-        </aside>
-        <div class="hero-model">
-          <div id="threejs-container" class="hero-model__canvas" role="img" aria-label="Interactive 3D logo"></div>
-          <div class="interaction-hint" data-interaction-hint data-hint-duration="3000"></div>
-          <button type="button" class="lighting-toggle" data-lighting-toggle aria-controls="lighting-controls" aria-expanded="false">
-            Adjust Lighting
-          </button>
-          <div class="lighting-controls" id="lighting-controls" data-lighting-controls aria-hidden="true">
+      <div class="hero-model">
+        <div class="model-selector" data-model-list role="navigation" aria-label="Model library">
+          <button type="button" class="model-option" data-model-url="city.glb" data-model-scale="0.02,0.02,0.02" data-model-position="0,-1,0">City Block</button>
+          <button type="button" class="model-option" data-model-url="construction.glb" data-model-scale="0.015,0.015,0.015" data-model-position="0,-1,0">Construction Site</button>
+          <button type="button" class="model-option" data-model-url="ramp.glb" data-model-scale="1.2,1.2,1.2" data-model-position="0,-0.5,0">Skate Ramp</button>
+          <button type="button" class="model-option" data-model-url="SantiagoLogo.glb">Santiago Logo</button>
+        </div>
+        <div id="threejs-container" class="hero-model__canvas" role="img" aria-label="Interactive 3D logo"></div>
+        <div class="interaction-hint" data-interaction-hint data-hint-duration="3000"></div>
+        <button type="button" class="lighting-toggle" data-lighting-toggle aria-controls="lighting-controls" aria-expanded="false">
+          Adjust Lighting
+        </button>
+        <div class="lighting-controls" id="lighting-controls" data-lighting-controls aria-hidden="true">
             <div class="lighting-controls__header">
               <h2>Lighting Controls</h2>
               <button type="button" class="lighting-close" data-lighting-close aria-label="Close lighting controls">×</button>
