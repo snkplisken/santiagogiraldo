@@ -63,17 +63,25 @@
       pointer-events: auto;
       background: none;
       border: none;
-      color: #ffffff;
+      color: #D2F059;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
       text-align: left;
       cursor: pointer;
       padding: 0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .model-option:hover,
+    .model-option:focus-visible {
+      color: #aaa;
+      outline: none;
     }
 
     .model-option.is-active,
     .model-option[aria-pressed="true"] {
-      text-decoration: underline;
+      color: #aaa;
     }
 
     .model-option[data-loading="true"] {
@@ -123,11 +131,11 @@
   <main>
     <section class="hero">
       <div class="hero-model">
-        <div class="model-selector" data-model-list role="navigation" aria-label="Model library">
-          <button type="button" class="model-option" data-model-url="city.glb" data-model-scale="0.02,0.02,0.02" data-model-position="0,-1,0">City Block</button>
-          <button type="button" class="model-option" data-model-url="construction.glb" data-model-scale="0.015,0.015,0.015" data-model-position="0,-1,0">Construction Site</button>
-          <button type="button" class="model-option" data-model-url="ramp.glb" data-model-scale="1.2,1.2,1.2" data-model-position="0,-0.5,0">Skate Ramp</button>
-          <button type="button" class="model-option" data-model-url="SantiagoLogo.glb">Santiago Logo</button>
+          <div class="model-selector" data-model-list role="navigation" aria-label="Model library">
+            <button type="button" class="model-option" data-model-url="city.glb" data-model-scale="0.02,0.02,0.02" data-model-position="0,-1,0" data-load-on-init="true">City Block</button>
+            <button type="button" class="model-option" data-model-url="construction.glb" data-model-scale="0.015,0.015,0.015" data-model-position="0,-1,0">Construction Site</button>
+            <button type="button" class="model-option" data-model-url="ramp.glb" data-model-scale="1.2,1.2,1.2" data-model-position="0,-0.5,0">Skate Ramp</button>
+            <button type="button" class="model-option" data-model-url="SantiagoLogo.glb">Santiago Logo</button>
         </div>
         <div id="threejs-container" class="hero-model__canvas" role="img" aria-label="Interactive 3D logo"></div>
         <div class="interaction-hint" data-interaction-hint data-hint-duration="3000"></div>

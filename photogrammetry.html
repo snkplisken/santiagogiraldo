@@ -63,17 +63,25 @@
       pointer-events: auto;
       background: none;
       border: none;
-      color: #ffffff;
+      color: #D2F059;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
       text-align: left;
       cursor: pointer;
       padding: 0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .model-option:hover,
+    .model-option:focus-visible {
+      color: #aaa;
+      outline: none;
     }
 
     .model-option.is-active,
     .model-option[aria-pressed="true"] {
-      text-decoration: underline;
+      color: #aaa;
     }
 
     .model-option[data-loading="true"] {
@@ -124,7 +132,7 @@
     <section class="hero">
       <div class="hero-model">
         <div class="model-selector" data-model-list role="navigation" aria-label="Model library">
-          <button type="button" class="model-option" data-model-url="SantiagoLogo.glb">Santiago Logo</button>
+          <button type="button" class="model-option" data-model-url="SantiagoLogo.glb" data-load-on-init="true">Santiago Logo</button>
           <button type="button" class="model-option" data-model-url="car.glb" data-model-rotation="0,1.57,0">Photogrammetry Car</button>
           <button type="button" class="model-option" data-model-url="mine.glb" data-model-scale="0.8,0.8,0.8">Mine Detail</button>
           <button type="button" class="model-option" data-model-url="ramp.glb" data-model-scale="1.2,1.2,1.2">Skate Ramp</button>
