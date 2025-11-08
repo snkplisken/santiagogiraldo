@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return Date.now();
     };
 
+    const INSTAGRAM_VERTICAL_OFFSET_PX = 90;
+
     const updateInstagramLayout = () => {
         if (!isInstagramWebView) {
             return;
@@ -43,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const computedTop = Math.round(viewportHeight * 0.72);
+        const computedTop = Math.round(viewportHeight * 0.72 + INSTAGRAM_VERTICAL_OFFSET_PX);
 
         if (lastInstagramFooterTop !== computedTop) {
             lastInstagramFooterTop = computedTop;
