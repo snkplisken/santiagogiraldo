@@ -19,6 +19,7 @@ const DEFAULT_MODEL_URL = 'SantiagoLogo.glb';
 const DEFAULT_CONTAINER_ID = 'threejs-container';
 const DEFAULT_MODEL_POSITION = [-0.35, 0, -0.5];
 const DEFAULT_MODEL_ROTATION = [-0.25, 0, 0];
+const DEFAULT_MODEL_SCALE = [1, 1, 1];
 const DEFAULT_CAMERA_POSITION = [0, 4, 8];
 
 const parseVector = (value, fallback) => {
@@ -64,6 +65,8 @@ const container = resolveContainer();
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
 let mixer = null;
+let currentModel = null;
+let pendingModelRequestId = 0;
 
 const getContainerSize = () => {
     if (!container) {
@@ -142,43 +145,146 @@ if (scriptDataset.modelUrl) {
 }
 const modelPosition = parseVector(scriptDataset.modelPosition, DEFAULT_MODEL_POSITION);
 const modelRotation = parseVector(scriptDataset.modelRotation, DEFAULT_MODEL_ROTATION);
+const modelScale = parseVector(scriptDataset.modelScale, DEFAULT_MODEL_SCALE);
 
-// Function to set the position and rotation of the model
-function setupModel(model) {
-    model.position.set(...modelPosition); // Set position
-    model.rotation.set(...modelRotation); // Set rotation
-}
+const disposeMaterial = (material) => {
+    if (!material) {
+        return;
+    }
+
+    if (Array.isArray(material)) {
+        material.forEach(disposeMaterial);
+        return;
+    }
+
+    Object.keys(material).forEach((key) => {
+        const value = material[key];
+        if (value && typeof value === 'object' && 'dispose' in value && typeof value.dispose === 'function') {
+            value.dispose();
+        }
+    });
+
+    if (typeof material.dispose === 'function') {
+        material.dispose();
+    }
+};
+
+const disposeModel = (model) => {
+    if (!model) {
+        return;
+    }
+
+    model.traverse((child) => {
+        if (!child.isMesh) {
+            return;
+        }
+
+        if (child.geometry && typeof child.geometry.dispose === 'function') {
+            child.geometry.dispose();
+        }
+
+        disposeMaterial(child.material);
+    });
+};
+
+const setupModel = (model, overrides = {}) => {
+    const targetPosition = overrides.position ?? modelPosition;
+    const targetRotation = overrides.rotation ?? modelRotation;
+    const targetScale = overrides.scale ?? modelScale;
+
+    if (Array.isArray(targetPosition) && targetPosition.length === 3) {
+        model.position.set(...targetPosition);
+    }
+
+    if (Array.isArray(targetRotation) && targetRotation.length === 3) {
+        model.rotation.set(...targetRotation);
+    }
+
+    if (Array.isArray(targetScale) && targetScale.length === 3) {
+        model.scale.set(...targetScale);
+    }
+};
+
+const resolveCameraTarget = (overrides, model) => {
+    if (Array.isArray(overrides.cameraTarget) && overrides.cameraTarget.length === 3) {
+        return new THREE.Vector3(...overrides.cameraTarget);
+    }
+
+    if (explicitCameraTarget) {
+        return explicitCameraTarget.clone();
+    }
+
+    return model.position.clone();
+};
 
 // Load the model
-function loadModel(url) {
-    loader.load(url, function (gltf) {
-        const model = gltf.scene;
-        setupModel(model);
-        scene.add(model);
+function loadModel(url, overrides = {}, lifecycle = {}) {
+    if (!url) {
+        console.warn('Threejs_script.js: loadModel called without a valid URL.');
+        lifecycle.onError?.(new Error('Missing model URL'));
+        lifecycle.onComplete?.();
+        return;
+    }
 
-        if (mixer) {
-            mixer.stopAllAction();
+    const requestId = ++pendingModelRequestId;
+    lifecycle.onStart?.();
+
+    loader.load(
+        url,
+        (gltf) => {
+            if (requestId !== pendingModelRequestId) {
+                disposeModel(gltf.scene);
+                lifecycle.onComplete?.();
+                return;
+            }
+
+            if (currentModel) {
+                scene.remove(currentModel);
+                disposeModel(currentModel);
+                currentModel = null;
+            }
+
+            if (mixer) {
+                mixer.stopAllAction();
+                mixer = null;
+            }
+
+            const model = gltf.scene;
+            setupModel(model, overrides);
+            scene.add(model);
+            currentModel = model;
+
+            if (gltf.animations?.length) {
+                mixer = new THREE.AnimationMixer(model);
+                gltf.animations.forEach((clip) => {
+                    const action = mixer.clipAction(clip);
+                    action.reset();
+                    action.play();
+                });
+            }
+
+            const resolvedCameraPosition = overrides.cameraPosition ?? cameraPosition;
+            if (Array.isArray(resolvedCameraPosition) && resolvedCameraPosition.length === 3) {
+                camera.position.set(...resolvedCameraPosition);
+            }
+
+            const target = resolveCameraTarget(overrides, model);
+            camera.lookAt(target);
+            controls.target.copy(target);
+            controls.update();
+
+            lifecycle.onComplete?.();
+        },
+        undefined,
+        (error) => {
+            if (requestId === pendingModelRequestId) {
+                console.error('An error happened while loading the model:', error);
+            }
+
+            lifecycle.onError?.(error);
+            lifecycle.onComplete?.();
         }
-
-        if (gltf.animations?.length) {
-            mixer = new THREE.AnimationMixer(model);
-            gltf.animations.forEach((clip) => {
-                const action = mixer.clipAction(clip);
-                action.reset();
-                action.play();
-            });
-        } else {
-            mixer = null;
-        }
-
-        // Make the camera look at the configured target or the model
-        const target = explicitCameraTarget ?? model.position;
-        camera.lookAt(target);
-        controls.target.copy(target);
-        controls.update();
-    }, undefined, function (error) {
-        console.error('An error happened while loading the model:', error);
-    });
+    );
 }
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -188,6 +294,10 @@ if (explicitCameraTarget) {
     controls.target.copy(explicitCameraTarget);
     controls.update();
 }
+
+const modelListElement = document.querySelector('[data-model-list]');
+const modelButtons = modelListElement ? Array.from(modelListElement.querySelectorAll('[data-model-url]')) : [];
+const shouldDelayInitialLoad = modelButtons.length > 0;
 
 // Function to control camera zoom based on window width
 function setCameraZoom() {
@@ -217,8 +327,10 @@ window.addEventListener('resize', () => {
     setCameraZoom(); // Adjust zoom on resize
 });
 
-// Load the model
-loadModel(modelUrl);
+// Load the model unless this page manages the loading through a model list
+if (!shouldDelayInitialLoad) {
+    loadModel(modelUrl);
+}
 
 // DOM Content Loaded Event for Other Interactions
 document.addEventListener('DOMContentLoaded', function() {
@@ -423,4 +535,60 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     lightingColorConfigurations.forEach(bindLightingColor);
+
+    if (modelButtons.length) {
+        let activeModelButton = null;
+
+        const parseModelOverrides = (dataset) => ({
+            position: parseOptionalVector(dataset.modelPosition),
+            rotation: parseOptionalVector(dataset.modelRotation),
+            scale: parseOptionalVector(dataset.modelScale),
+            cameraPosition: parseOptionalVector(dataset.cameraPosition),
+            cameraTarget: parseOptionalVector(dataset.cameraTarget),
+        });
+
+        const setActiveModelButton = (button) => {
+            if (activeModelButton === button) {
+                return;
+            }
+
+            if (activeModelButton) {
+                activeModelButton.classList.remove('is-active');
+                activeModelButton.setAttribute('aria-pressed', 'false');
+            }
+
+            activeModelButton = button;
+
+            if (activeModelButton) {
+                activeModelButton.classList.add('is-active');
+                activeModelButton.setAttribute('aria-pressed', 'true');
+            }
+        };
+
+        modelButtons.forEach((button) => {
+            button.setAttribute('aria-pressed', 'false');
+
+            button.addEventListener('click', () => {
+                const overrides = parseModelOverrides(button.dataset);
+
+                setActiveModelButton(button);
+
+                loadModel(button.dataset.modelUrl, overrides, {
+                    onStart: () => {
+                        button.disabled = true;
+                        button.setAttribute('data-loading', 'true');
+                    },
+                    onComplete: () => {
+                        button.disabled = false;
+                        button.removeAttribute('data-loading');
+                    },
+                });
+            });
+        });
+
+        const initialButton = modelButtons.find((button) => button.dataset.loadOnInit === 'true');
+        if (initialButton) {
+            initialButton.click();
+        }
+    }
 });
