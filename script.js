@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return Date.now();
     };
 
-    const INSTAGRAM_VERTICAL_OFFSET_PX = 60;
+    const INSTAGRAM_VERTICAL_OFFSET_PX = 90;
 
     const updateInstagramLayout = () => {
         if (!isInstagramWebView) {
