@@ -64,95 +64,97 @@
             Adjust Lighting
           </button>
           <div class="lighting-controls" id="lighting-controls" data-lighting-controls aria-hidden="true">
-            <div class="lighting-controls__header">
-              <h2>Lighting Controls</h2>
-              <button type="button" class="lighting-close" data-lighting-close aria-label="Close lighting controls">
-                ×
-              </button>
-            </div>
-            <p class="lighting-controls__description">
-              Fine-tune the studio lights, color, and intensity.
-            </p>
-            <div class="lighting-controls__group">
-              <h3>Key Light</h3>
-              <label class="lighting-slider" for="key-light-x">
-                <span>Horizontal</span>
-                <input type="range" id="key-light-x" min="-15" max="15" step="0.1" value="0" />
-                <span class="lighting-slider__value" id="key-light-x-value">0.0</span>
-              </label>
-              <label class="lighting-slider" for="key-light-y">
-                <span>Vertical</span>
-                <input type="range" id="key-light-y" min="-15" max="15" step="0.1" value="0" />
-                <span class="lighting-slider__value" id="key-light-y-value">0.0</span>
-              </label>
-              <label class="lighting-slider" for="key-light-z">
-                <span>Depth</span>
-                <input type="range" id="key-light-z" min="-20" max="20" step="0.1" value="10" />
-                <span class="lighting-slider__value" id="key-light-z-value">10.0</span>
-              </label>
-              <label class="lighting-slider" for="key-light-intensity">
-                <span>Intensity</span>
-                <input type="range" id="key-light-intensity" min="0" max="5" step="0.1" value="2" />
-                <span class="lighting-slider__value" id="key-light-intensity-value">2.0</span>
-              </label>
-              <label class="lighting-color" for="key-light-color">
-                <span>Color</span>
-                <input type="color" id="key-light-color" value="#ffffff" />
-              </label>
-            </div>
-            <div class="lighting-controls__group">
-              <h3>Fill Light</h3>
-              <label class="lighting-slider" for="fill-light-x">
-                <span>Horizontal</span>
-                <input type="range" id="fill-light-x" min="-15" max="15" step="0.1" value="10" />
-                <span class="lighting-slider__value" id="fill-light-x-value">10.0</span>
-              </label>
-              <label class="lighting-slider" for="fill-light-y">
-                <span>Vertical</span>
-                <input type="range" id="fill-light-y" min="-15" max="15" step="0.1" value="0" />
-                <span class="lighting-slider__value" id="fill-light-y-value">0.0</span>
-              </label>
-              <label class="lighting-slider" for="fill-light-z">
-                <span>Depth</span>
-                <input type="range" id="fill-light-z" min="-20" max="20" step="0.1" value="10" />
-                <span class="lighting-slider__value" id="fill-light-z-value">10.0</span>
-              </label>
-              <label class="lighting-slider" for="fill-light-intensity">
-                <span>Intensity</span>
-                <input type="range" id="fill-light-intensity" min="0" max="5" step="0.1" value="1" />
-                <span class="lighting-slider__value" id="fill-light-intensity-value">1.0</span>
-              </label>
-              <label class="lighting-color" for="fill-light-color">
-                <span>Color</span>
-                <input type="color" id="fill-light-color" value="#ffffff" />
-              </label>
-            </div>
-            <div class="lighting-controls__group">
-              <h3>Back Light</h3>
-              <label class="lighting-slider" for="back-light-x">
-                <span>Horizontal</span>
-                <input type="range" id="back-light-x" min="-15" max="15" step="0.1" value="0" />
-                <span class="lighting-slider__value" id="back-light-x-value">0.0</span>
-              </label>
-              <label class="lighting-slider" for="back-light-y">
-                <span>Vertical</span>
-                <input type="range" id="back-light-y" min="-15" max="15" step="0.1" value="0" />
-                <span class="lighting-slider__value" id="back-light-y-value">0.0</span>
-              </label>
-              <label class="lighting-slider" for="back-light-z">
-                <span>Depth</span>
-                <input type="range" id="back-light-z" min="-20" max="20" step="0.1" value="-10" />
-                <span class="lighting-slider__value" id="back-light-z-value">-10.0</span>
-              </label>
-              <label class="lighting-slider" for="back-light-intensity">
-                <span>Intensity</span>
-                <input type="range" id="back-light-intensity" min="0" max="5" step="0.1" value="1" />
-                <span class="lighting-slider__value" id="back-light-intensity-value">1.0</span>
-              </label>
-              <label class="lighting-color" for="back-light-color">
-                <span>Color</span>
-                <input type="color" id="back-light-color" value="#ffffff" />
-              </label>
+            <div class="lighting-controls__content">
+              <div class="lighting-controls__header">
+                <h2>Lighting Controls</h2>
+                <button type="button" class="lighting-close" data-lighting-close aria-label="Close lighting controls">
+                  ×
+                </button>
+              </div>
+              <p class="lighting-controls__description">
+                Fine-tune the studio lights, color, and intensity.
+              </p>
+              <div class="lighting-controls__group">
+                <h3>Key Light</h3>
+                <label class="lighting-slider" for="key-light-x">
+                  <span>Horizontal</span>
+                  <input type="range" id="key-light-x" min="-15" max="15" step="0.1" value="0" />
+                  <span class="lighting-slider__value" id="key-light-x-value">0.0</span>
+                </label>
+                <label class="lighting-slider" for="key-light-y">
+                  <span>Vertical</span>
+                  <input type="range" id="key-light-y" min="-15" max="15" step="0.1" value="0" />
+                  <span class="lighting-slider__value" id="key-light-y-value">0.0</span>
+                </label>
+                <label class="lighting-slider" for="key-light-z">
+                  <span>Depth</span>
+                  <input type="range" id="key-light-z" min="-20" max="20" step="0.1" value="10" />
+                  <span class="lighting-slider__value" id="key-light-z-value">10.0</span>
+                </label>
+                <label class="lighting-slider" for="key-light-intensity">
+                  <span>Intensity</span>
+                  <input type="range" id="key-light-intensity" min="0" max="5" step="0.1" value="2" />
+                  <span class="lighting-slider__value" id="key-light-intensity-value">2.0</span>
+                </label>
+                <label class="lighting-color" for="key-light-color">
+                  <span>Color</span>
+                  <input type="color" id="key-light-color" value="#ffffff" />
+                </label>
+              </div>
+              <div class="lighting-controls__group">
+                <h3>Fill Light</h3>
+                <label class="lighting-slider" for="fill-light-x">
+                  <span>Horizontal</span>
+                  <input type="range" id="fill-light-x" min="-15" max="15" step="0.1" value="10" />
+                  <span class="lighting-slider__value" id="fill-light-x-value">10.0</span>
+                </label>
+                <label class="lighting-slider" for="fill-light-y">
+                  <span>Vertical</span>
+                  <input type="range" id="fill-light-y" min="-15" max="15" step="0.1" value="0" />
+                  <span class="lighting-slider__value" id="fill-light-y-value">0.0</span>
+                </label>
+                <label class="lighting-slider" for="fill-light-z">
+                  <span>Depth</span>
+                  <input type="range" id="fill-light-z" min="-20" max="20" step="0.1" value="10" />
+                  <span class="lighting-slider__value" id="fill-light-z-value">10.0</span>
+                </label>
+                <label class="lighting-slider" for="fill-light-intensity">
+                  <span>Intensity</span>
+                  <input type="range" id="fill-light-intensity" min="0" max="5" step="0.1" value="1" />
+                  <span class="lighting-slider__value" id="fill-light-intensity-value">1.0</span>
+                </label>
+                <label class="lighting-color" for="fill-light-color">
+                  <span>Color</span>
+                  <input type="color" id="fill-light-color" value="#ffffff" />
+                </label>
+              </div>
+              <div class="lighting-controls__group">
+                <h3>Back Light</h3>
+                <label class="lighting-slider" for="back-light-x">
+                  <span>Horizontal</span>
+                  <input type="range" id="back-light-x" min="-15" max="15" step="0.1" value="0" />
+                  <span class="lighting-slider__value" id="back-light-x-value">0.0</span>
+                </label>
+                <label class="lighting-slider" for="back-light-y">
+                  <span>Vertical</span>
+                  <input type="range" id="back-light-y" min="-15" max="15" step="0.1" value="0" />
+                  <span class="lighting-slider__value" id="back-light-y-value">0.0</span>
+                </label>
+                <label class="lighting-slider" for="back-light-z">
+                  <span>Depth</span>
+                  <input type="range" id="back-light-z" min="-20" max="20" step="0.1" value="-10" />
+                  <span class="lighting-slider__value" id="back-light-z-value">-10.0</span>
+                </label>
+                <label class="lighting-slider" for="back-light-intensity">
+                  <span>Intensity</span>
+                  <input type="range" id="back-light-intensity" min="0" max="5" step="0.1" value="1" />
+                  <span class="lighting-slider__value" id="back-light-intensity-value">1.0</span>
+                </label>
+                <label class="lighting-color" for="back-light-color">
+                  <span>Color</span>
+                  <input type="color" id="back-light-color" value="#ffffff" />
+                </label>
+              </div>
             </div>
           </div>
         </div>
