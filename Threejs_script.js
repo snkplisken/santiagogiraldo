@@ -538,6 +538,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (modelButtons.length) {
         let activeModelButton = null;
+        const modelDescriptionTarget = document.querySelector('[data-model-description-target]');
 
         const parseModelOverrides = (dataset) => ({
             position: parseOptionalVector(dataset.modelPosition),
@@ -570,6 +571,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             button.addEventListener('click', () => {
                 const overrides = parseModelOverrides(button.dataset);
+                if (modelDescriptionTarget) {
+                    modelDescriptionTarget.textContent = button.dataset.modelDescription ?? '';
+                }
 
                 setActiveModelButton(button);
 

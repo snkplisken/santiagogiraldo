@@ -133,10 +133,10 @@
     <section class="hero">
       <div class="hero-model">
         <div class="model-selector" data-model-list role="navigation" aria-label="Model library">
-          <button type="button" class="model-option" data-model-url="photogrammetry/stove.glb" data-load-on-init="true">Stove</button>
-          <button type="button" class="model-option" data-model-url="photogrammetry/arepa.glb" data-model-rotation="0,1.57,0">Arepa</button>
-          <button type="button" class="model-option" data-model-url="photogrammetry/ice.glb" data-model-scale="0.8,0.8,0.8">Ice</button>
-          <button type="button" class="model-option" data-model-url="photogrammetry/boxes.glb" data-model-scale="1.2,1.2,1.2">Boxes</button>
+          <button type="button" class="model-option" data-model-url="photogrammetry/stove.glb" data-load-on-init="true" data-model-description="Hand-scanned stove capturing the glow of daily cooking rituals.">Stove</button>
+          <button type="button" class="model-option" data-model-url="photogrammetry/arepa.glb" data-model-rotation="0,1.57,0" data-model-description="Arepa still-life showing every toasted grain in crisp relief.">Arepa</button>
+          <button type="button" class="model-option" data-model-url="photogrammetry/ice.glb" data-model-scale="0.8,0.8,0.8" data-model-description="Ice fragments frozen mid-melt for a glassy macro study.">Ice</button>
+          <button type="button" class="model-option" data-model-url="photogrammetry/boxes.glb" data-model-scale="1.2,1.2,1.2" data-model-description="Weathered shipping boxes stacked from an urban sidewalk scan.">Boxes</button>
         </div>
         <div id="threejs-container" class="hero-model__canvas" role="img" aria-label="Interactive 3D logo"></div>
         <div class="interaction-hint" data-interaction-hint data-hint-duration="3000"></div>
@@ -144,6 +144,7 @@
           Adjust Lighting
         </button>
         <div class="lighting-controls" id="lighting-controls" data-lighting-controls aria-hidden="true">
+            <div class="lighting-controls__model-description" data-model-description-target role="status" aria-live="polite"></div>
             <div class="lighting-controls__header">
               <h2>Lighting Controls</h2>
               <button type="button" class="lighting-close" data-lighting-close aria-label="Close lighting controls">×</button>

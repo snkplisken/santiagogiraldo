@@ -259,6 +259,18 @@ header {
   color: rgba(210, 240, 89, 0.8);
 }
 
+.lighting-controls__model-description {
+  margin: 0 0 18px;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: #D2F059;
+  text-align: left;
+}
+
+.lighting-controls__model-description:empty {
+  display: none;
+}
+
 .lighting-controls__group {
   margin-bottom: 18px;
 }
