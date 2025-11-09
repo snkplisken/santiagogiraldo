@@ -140,11 +140,13 @@
           </div>
           <div id="threejs-container" class="hero-model__canvas" role="img" aria-label="Interactive 3D logo"></div>
           <div class="interaction-hint" data-interaction-hint data-hint-duration="3000"></div>
-          <button type="button" class="lighting-toggle" data-lighting-toggle aria-controls="lighting-controls" aria-expanded="false">
-            Adjust Lighting
-          </button>
+          <div class="lighting-launcher">
+            <div class="lighting-description" data-model-description-target role="status" aria-live="polite"></div>
+            <button type="button" class="lighting-toggle" data-lighting-toggle aria-controls="lighting-controls" aria-expanded="false">
+              Adjust Lighting
+            </button>
+          </div>
           <div class="lighting-controls" id="lighting-controls" data-lighting-controls aria-hidden="true">
-            <div class="lighting-controls__model-description" data-model-description-target role="status" aria-live="polite"></div>
             <div class="lighting-controls__content">
               <div class="lighting-controls__header">
                 <h2>Lighting Controls</h2>
