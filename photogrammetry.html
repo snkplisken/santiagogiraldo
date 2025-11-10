@@ -67,14 +67,6 @@
       pointer-events: auto;
     }
 
-    .model-menu .lighting-launcher {
-      position: static;
-      left: auto;
-      bottom: auto;
-      max-width: min(360px, 70vw);
-      pointer-events: auto;
-    }
-
     .model-option {
       pointer-events: auto;
       background: none;
@@ -118,9 +110,6 @@
         font-size: 0.85rem;
       }
 
-      .model-menu .lighting-launcher {
-        max-width: min(320px, 82vw);
-      }
     }
   </style>
 </head>
@@ -158,15 +147,15 @@
             <button type="button" class="model-option" data-model-url="photogrammetry/ice.glb" data-model-scale="0.8,0.8,0.8" data-model-description="Ice fragments frozen mid-melt for a glassy macro study.">Ice</button>
             <button type="button" class="model-option" data-model-url="photogrammetry/boxes.glb" data-model-scale="1.2,1.2,1.2" data-model-description="Weathered shipping boxes stacked from an urban sidewalk scan.">Boxes</button>
           </div>
-          <div class="lighting-launcher">
-            <div class="lighting-description" data-model-description-target role="status" aria-live="polite"></div>
-            <button type="button" class="lighting-toggle" data-lighting-toggle aria-controls="lighting-controls" aria-expanded="false">
-              Adjust Lighting
-            </button>
-          </div>
+          <div class="lighting-description" data-model-description-target role="status" aria-live="polite"></div>
         </div>
         <div id="threejs-container" class="hero-model__canvas" role="img" aria-label="Interactive 3D logo"></div>
         <div class="interaction-hint" data-interaction-hint data-hint-duration="3000"></div>
+        <div class="lighting-launcher">
+          <button type="button" class="lighting-toggle" data-lighting-toggle aria-controls="lighting-controls" aria-expanded="false">
+            Adjust Lighting
+          </button>
+        </div>
         <div class="lighting-controls" id="lighting-controls" data-lighting-controls aria-hidden="true">
           <div class="lighting-controls__content">
             <div class="lighting-controls__header">
