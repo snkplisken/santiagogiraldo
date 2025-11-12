@@ -215,7 +215,9 @@ header {
   -webkit-backdrop-filter: blur(16px) saturate(125%);
   color: #D2F059;
   max-height: min(75vh, 560px);
-  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -224,8 +226,8 @@ header {
 }
 
 .lighting-controls__content {
+  flex: 1 1 auto;
   padding: 24px;
-  max-height: min(75vh, 560px);
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -412,12 +414,11 @@ body.lighting-panel-open {
     top: auto;
     bottom: calc(env(safe-area-inset-bottom, 0px) + var(--viewport-offset-bottom, 0px) + 24px);
     transform: translate(-50%, 20px);
-    max-height: min(35vh, 280px);
+    max-height: min(70vh, 420px);
   }
 
   .lighting-controls__content {
     padding: 20px;
-    max-height: min(35vh, 280px);
   }
 
   .lighting-description {
