@@ -17,8 +17,8 @@ if (!scriptElement) {
 
 const DEFAULT_MODEL_URL = 'SantiagoLogo.glb';
 const DEFAULT_CONTAINER_ID = 'threejs-container';
-const DEFAULT_MODEL_POSITION = [-0.35, 0, -0.5];
-const DEFAULT_MODEL_ROTATION = [-0.25, 0, 0];
+const DEFAULT_MODEL_POSITION = [0, 0, 0];
+const DEFAULT_MODEL_ROTATION = [0, 0, 0];
 const DEFAULT_MODEL_SCALE = [1, 1, 1];
 const DEFAULT_CAMERA_POSITION = [0, 4, 8];
 
@@ -205,6 +205,23 @@ const setupModel = (model, overrides = {}) => {
     }
 };
 
+const createCenteredModelGroup = (model) => {
+    const pivot = new THREE.Group();
+    pivot.name = 'ModelPivot';
+
+    model.updateMatrixWorld(true);
+    const boundingBox = new THREE.Box3().setFromObject(model);
+
+    if (!boundingBox.isEmpty()) {
+        const center = boundingBox.getCenter(new THREE.Vector3());
+        model.position.sub(center);
+    }
+
+    pivot.add(model);
+
+    return pivot;
+};
+
 const resolveCameraTarget = (overrides, model) => {
     if (Array.isArray(overrides.cameraTarget) && overrides.cameraTarget.length === 3) {
         return new THREE.Vector3(...overrides.cameraTarget);
@@ -249,13 +266,13 @@ function loadModel(url, overrides = {}, lifecycle = {}) {
                 mixer = null;
             }
 
-            const model = gltf.scene;
-            setupModel(model, overrides);
-            scene.add(model);
-            currentModel = model;
+            const modelGroup = createCenteredModelGroup(gltf.scene);
+            setupModel(modelGroup, overrides);
+            scene.add(modelGroup);
+            currentModel = modelGroup;
 
             if (gltf.animations?.length) {
-                mixer = new THREE.AnimationMixer(model);
+                mixer = new THREE.AnimationMixer(gltf.scene);
                 gltf.animations.forEach((clip) => {
                     const action = mixer.clipAction(clip);
                     action.reset();
@@ -268,7 +285,7 @@ function loadModel(url, overrides = {}, lifecycle = {}) {
                 camera.position.set(...resolvedCameraPosition);
             }
 
-            const target = resolveCameraTarget(overrides, model);
+            const target = resolveCameraTarget(overrides, modelGroup);
             camera.lookAt(target);
             controls.target.copy(target);
             controls.update();
