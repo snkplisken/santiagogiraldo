@@ -19,6 +19,44 @@ body, html {
   overflow-x: hidden;
 }
 
+body.dark-page {
+  background-color: #000;
+  background-image: none;
+  color: #D2F059;
+}
+
+body.dark-page .dark-page__main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px;
+  box-sizing: border-box;
+}
+
+.dark-page__content {
+  max-width: 760px;
+  width: min(760px, 100%);
+  padding: clamp(28px, 4vw, 48px);
+  border-radius: 20px;
+  border: 1px solid #D2F059;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.dark-page__content h1 {
+  margin: 0 0 16px;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: 0.08em;
+}
+
+.dark-page__content p {
+  margin: 0;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  line-height: 1.6;
+}
+
 body {
   padding-bottom: calc(
     env(safe-area-inset-bottom, 0px)
