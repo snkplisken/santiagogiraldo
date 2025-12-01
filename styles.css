@@ -511,6 +511,23 @@ nav a:hover {
   color: #aaa;
 }
 
+nav a.nav-tab--experimental {
+  display: inline-block;
+  width: 52px;
+  height: 18px;
+  padding: 0;
+  background: #000;
+  border: 1px solid #D2F059;
+  border-radius: 12px;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+
+nav a.nav-tab--experimental:focus-visible {
+  outline: 2px solid #D2F059;
+  outline-offset: 3px;
+}
+
 
 footer {
   position: fixed;
@@ -952,6 +969,13 @@ body.menu-open footer {
     padding: 10px 20px;
     display: block;
     text-align: center;
+  }
+
+  nav a.nav-tab--experimental {
+    width: 82px;
+    height: 26px;
+    margin: 0 auto;
+    padding: 0;
   }
 
   .menu-close {
