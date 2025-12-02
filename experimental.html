@@ -3,21 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop</title>
+  <title>Experimental</title>
   <link rel="stylesheet" href="styles.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.149.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.149.0/examples/jsm/"
-      }
-    }
-  </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200&display=swap');
   </style>
 </head>
-<body>
+<body class="dark-page">
   <header>
     <div class="hamburger-menu">
       <div class="line"></div>
@@ -36,26 +28,22 @@
       <button type="button" class="menu-close" aria-label="Close menu">X</button>
     </nav>
     <div class="logo">
-      <a href="index.html" target="_blank">
-          <img src="Logo.svg" alt="Logo" />
+      <a href="index.html">
+        <img src="Logo.svg" alt="Santiago Giraldo logo" />
       </a>
-  </div>
-  
+    </div>
   </header>
-  <main>
-    <!-- Main content would go here -->
-  </main>
-  
+
+  <main aria-label="Content area"></main>
+
   <footer>
     <div class="footer-content">
       <div id="clock" class="footer-clock">00:00:00</div>
-      <div id="scrolling-text" class="footer-text">
-        THIS IS THE SHOP PAGE LETS HOPE IT WORKS
-      </div>
+      <div id="scrolling-text" class="footer-text">WELCOME TO THE EXPERIMENTAL CANVAS</div>
     </div>
     <button id="footerCloseButton">X</button>
   </footer>
-  
-  <script type="module" src="script.js"></script>
+
+  <script src="script.js"></script>
 </body>
 </html>
