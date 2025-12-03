@@ -302,6 +302,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (bodyElement) {
             bodyElement.classList.toggle('menu-open', isOpen);
         }
+
+        if (hamburgerMenu) {
+            hamburgerMenu.classList.toggle('is-active', isOpen);
+            hamburgerMenu.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
     };
 
     if (hamburgerMenu && navUl) {
