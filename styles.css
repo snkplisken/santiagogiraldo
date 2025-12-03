@@ -760,6 +760,7 @@ body.menu-open footer {
   line-height: 20px; /* Match the original compact line-height */
   position: relative;
   padding-left: 4px;
+  color: black; /* Match scrolling text color used on other pages */
 }
 
 .footer-clock {
