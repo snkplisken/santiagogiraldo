@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const footerElement = document.querySelector('footer');
+    const footerTextElement = document.getElementById('scrolling-text');
     const isInstagramWebView = (() => {
         const navigatorInfo = window.navigator || {};
         const userAgent = (
@@ -32,6 +33,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const INSTAGRAM_VERTICAL_OFFSET_PX = 90;
 
+    const MOBILE_POINTER_TEXT = 'WITH YOUR FINGERS';
+    const DESKTOP_POINTER_TEXT = 'WITH YOUR CURSOR';
+
+    const updateFooterInstruction = () => {
+        if (!footerTextElement) {
+            return;
+        }
+
+        const prefersDesktopPointer =
+            window.matchMedia('(pointer:fine) and (hover:hover)').matches ||
+            window.innerWidth >= 900;
+
+        const currentText = footerTextElement.textContent || '';
+
+        if (prefersDesktopPointer) {
+            const updatedText = currentText.replace(
+                new RegExp(MOBILE_POINTER_TEXT, 'gi'),
+                DESKTOP_POINTER_TEXT
+            );
+            if (updatedText !== currentText) {
+                footerTextElement.textContent = updatedText;
+            }
+        } else {
+            const updatedText = currentText.replace(
+                new RegExp(DESKTOP_POINTER_TEXT, 'gi'),
+                MOBILE_POINTER_TEXT
+            );
+            if (updatedText !== currentText) {
+                footerTextElement.textContent = updatedText;
+            }
+        }
+    };
+
     const updateInstagramLayout = () => {
         if (!isInstagramWebView) {
             return;
@@ -54,6 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const updateViewportOffset = () => {
+        updateFooterInstruction();
+
         if (isInstagramWebView) {
             updateInstagramLayout();
             if (lastAppliedOffset !== 0) {
