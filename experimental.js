@@ -1,12 +1,7 @@
 const stage = document.getElementById('glb-stage');
-const addForm = document.getElementById('glb-add-form');
-const modelInput = document.getElementById('glb-url');
-const targetInput = document.getElementById('target-url');
-const labelInput = document.getElementById('glb-label');
-const presetButtons = document.querySelectorAll('.glb-preset');
 
 const TAP_DISTANCE_THRESHOLD = 6;
-const DEFAULT_ITEM_WIDTH = 220;
+const DEFAULT_ITEM_WIDTH = 240;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -88,15 +83,10 @@ const createDragController = (item) => {
   return { startDrag, endDrag, hasMoved };
 };
 
-const createGlbItem = ({ modelUrl, targetUrl, label }) => {
+const createGlbItem = ({ modelUrl, targetUrl }) => {
   const item = document.createElement('article');
   item.className = 'glb-item';
   item.style.width = `${DEFAULT_ITEM_WIDTH}px`;
-
-  const hint = stage.querySelector('.glb-stage-hint');
-  if (hint) {
-    hint.remove();
-  }
 
   const modelViewer = document.createElement('model-viewer');
   modelViewer.src = modelUrl;
@@ -108,15 +98,10 @@ const createGlbItem = ({ modelUrl, targetUrl, label }) => {
   modelViewer.setAttribute('ar', '');
   modelViewer.setAttribute('shadow-intensity', '0.5');
 
-  const caption = document.createElement('div');
-  caption.className = 'glb-caption';
-  caption.textContent = label || targetUrl || 'GLB';
-
   item.appendChild(modelViewer);
-  item.appendChild(caption);
   stage.appendChild(item);
 
-  // Randomize the initial position so new items do not stack.
+  // Randomize the initial position so models start apart.
   const { width, height } = computeStageBounds();
   const itemHeight = modelViewer.offsetHeight || 240;
   const randomLeft = Math.random() * Math.max(0, width - DEFAULT_ITEM_WIDTH);
@@ -151,45 +136,18 @@ const createGlbItem = ({ modelUrl, targetUrl, label }) => {
   });
 };
 
-const addGlbFromForm = (event) => {
-  event.preventDefault();
-  const modelUrl = modelInput.value.trim();
-  const targetUrl = targetInput.value.trim();
-  const label = labelInput.value.trim();
-
-  if (!modelUrl || !targetUrl) {
-    return;
-  }
-
-  createGlbItem({ modelUrl, targetUrl, label });
-  addForm.reset();
-  modelInput.focus();
-};
-
-const addGlbFromPreset = (event) => {
-  const button = event.currentTarget;
-  const modelUrl = button.dataset.model;
-  const targetUrl = button.dataset.target;
-  const label = button.textContent || '';
-  createGlbItem({ modelUrl, targetUrl, label });
-};
-
 const bootstrap = () => {
   if (!stage) {
     return;
   }
 
-  addForm?.addEventListener('submit', addGlbFromForm);
-  presetButtons.forEach((button) => {
-    button.addEventListener('click', addGlbFromPreset);
-  });
+  const placeholderItems = [
+    { modelUrl: 'SantiagoLogo.glb', targetUrl: 'Portfolio_3D.html' },
+    { modelUrl: 'construction.glb', targetUrl: 'DesignUnderConstruction.html' },
+    { modelUrl: 'car.glb', targetUrl: 'shop.html' },
+  ];
 
-  // Seed the stage with a single default item for quick interaction.
-  createGlbItem({
-    modelUrl: 'SantiagoLogo.glb',
-    targetUrl: 'Portfolio_3D.html',
-    label: 'Portfolio logo',
-  });
+  placeholderItems.forEach(createGlbItem);
 };
 
 window.addEventListener('DOMContentLoaded', bootstrap);
