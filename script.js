@@ -286,7 +286,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (navUl) {
         navUl.classList.remove('open');
     }
-    const closeMenuButton = pageHeader ? pageHeader.querySelector('.menu-close') : null;
 
     const applyMenuState = (isOpen) => {
         if (!navUl) {
@@ -312,24 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (hamburgerMenu && navUl) {
         hamburgerMenu.addEventListener('click', function() {
             applyMenuState(!navUl.classList.contains('open'));
-        });
-    }
-
-    if (closeMenuButton && navUl) {
-        const triggerCloseAnimation = () => {
-            closeMenuButton.classList.remove('is-animating');
-            // Force reflow so the animation can restart on successive taps
-            void closeMenuButton.offsetWidth;
-            closeMenuButton.classList.add('is-animating');
-        };
-
-        closeMenuButton.addEventListener('click', function() {
-            applyMenuState(false);
-            triggerCloseAnimation();
-        });
-
-        closeMenuButton.addEventListener('animationend', () => {
-            closeMenuButton.classList.remove('is-animating');
         });
     }
 
