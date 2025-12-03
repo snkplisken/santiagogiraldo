@@ -311,8 +311,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (closeMenuButton && navUl) {
+        const triggerCloseAnimation = () => {
+            closeMenuButton.classList.remove('is-animating');
+            // Force reflow so the animation can restart on successive taps
+            void closeMenuButton.offsetWidth;
+            closeMenuButton.classList.add('is-animating');
+        };
+
         closeMenuButton.addEventListener('click', function() {
             applyMenuState(false);
+            triggerCloseAnimation();
+        });
+
+        closeMenuButton.addEventListener('animationend', () => {
+            closeMenuButton.classList.remove('is-animating');
         });
     }
 

@@ -51,11 +51,53 @@
 
   .menu-close {
     display: none;
-    background: transparent;
-    border: none;
-    color: inherit;
-    font: inherit;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: #0b0b15;
+    border: 2px solid #D2F059;
+    border-radius: 16px;
+    color: #D2F059;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     cursor: pointer;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .menu-close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+  }
+
+  .menu-close:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
+  }
+
+  .menu-close.is-animating {
+    animation: menuClosePulse 0.32s ease;
+  }
+
+  @keyframes menuClosePulse {
+    0% {
+      transform: scale(1) rotate(0deg);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+    }
+    40% {
+      transform: scale(1.08) rotate(-4deg);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+    }
+    70% {
+      transform: scale(0.96) rotate(2deg);
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+    }
   }
   
   nav li {
@@ -117,14 +159,14 @@
     }
 
     .menu-close {
-      display: block;
+      display: inline-flex;
       position: fixed;
       top: 15px;
       right: 15px;
-      padding: 10px;
-      font-size: 28px;
+      padding: 12px;
+      gap: 6px;
+      font-size: 24px;
       line-height: 1;
-      color: #000;
       z-index: 3100;
       opacity: 0;
       pointer-events: none;
