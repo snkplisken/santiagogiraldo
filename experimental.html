@@ -11,8 +11,45 @@
   <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 </head>
 <body class="experimental-full">
-  <main id="glb-stage" aria-label="Experimental canvas"></main>
+  <header>
+    <div class="hamburger-menu">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="DesignUnderConstruction.html">DESIGN</a></li>
+        <li><a href="Portfolio_3D.html">3D</a></li>
+        <li><a href="Photography.html">PHOTOGRAPHY</a></li>
+        <li><a href="music.html">MUSIC</a></li>
+        <li><a href="experimental.html" aria-label="Experimental" title="Experimental">EXPERIMENTAL</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+      </ul>
+      <button type="button" class="menu-close" aria-label="Close menu">X</button>
+    </nav>
+    <div class="logo">
+      <a href="index.html">
+        <img src="Logo.svg" alt="Santiago Giraldo logo" />
+      </a>
+    </div>
+  </header>
+
+  <main aria-label="Experimental canvas">
+    <div id="glb-stage"></div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div id="clock" class="footer-clock">00:00:00</div>
+      <div id="scrolling-text" class="footer-text">
+        ROTATE THE LOGO WITH YOUR FINGERS
+      </div>
+    </div>
+    <button id="footerCloseButton">X</button>
+  </footer>
 
   <script type="module" src="experimental.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
