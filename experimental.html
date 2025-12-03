@@ -8,6 +8,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200&display=swap');
   </style>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 </head>
 <body class="dark-page">
   <header>
@@ -34,7 +35,33 @@
     </div>
   </header>
 
-  <main aria-label="Content area"></main>
+  <main class="experimental-layout" aria-label="Content area">
+    <section class="glb-control-panel">
+      <div>
+        <p class="section-kicker">Try new things</p>
+        <h1>Experimental canvas</h1>
+        <p class="section-description">Drop GLB experiments into the canvas, drag them anywhere (touch and mouse friendly), and tap to jump to any page you want.</p>
+      </div>
+      <form id="glb-add-form" class="glb-add-form">
+        <label class="sr-only" for="glb-url">Model URL</label>
+        <input id="glb-url" name="glb-url" type="text" placeholder="GLB URL (e.g. SantiagoLogo.glb)" required>
+        <label class="sr-only" for="target-url">Link URL</label>
+        <input id="target-url" name="target-url" type="text" placeholder="Open link when tapped (e.g. Portfolio_3D.html)" required>
+        <label class="sr-only" for="glb-label">Label</label>
+        <input id="glb-label" name="glb-label" type="text" placeholder="Label (optional)" maxlength="60">
+        <button type="submit">Add GLB</button>
+      </form>
+      <div class="glb-presets" aria-label="Quick add options">
+        <button type="button" class="glb-preset" data-model="SantiagoLogo.glb" data-target="Portfolio_3D.html">Add logo</button>
+        <button type="button" class="glb-preset" data-model="construction.glb" data-target="DesignUnderConstruction.html">Add construction</button>
+        <button type="button" class="glb-preset" data-model="car.glb" data-target="shop.html">Add car</button>
+      </div>
+    </section>
+
+    <section class="glb-stage" id="glb-stage" aria-label="Draggable GLB workspace">
+      <p class="glb-stage-hint">Add a GLB and drag it around. Click or tap to open its link.</p>
+    </section>
+  </main>
 
   <footer>
     <div class="footer-content">
@@ -45,5 +72,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script type="module" src="experimental.js"></script>
 </body>
 </html>
