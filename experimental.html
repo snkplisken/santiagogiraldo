@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Experimental</title>
+  <title>Experimental Canvas</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200&display=swap');
   </style>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 </head>
-<body class="dark-page">
+<body class="experimental-full">
   <header>
     <div class="hamburger-menu">
       <div class="line"></div>
@@ -34,16 +35,21 @@
     </div>
   </header>
 
-  <main aria-label="Content area"></main>
+  <main aria-label="Experimental canvas">
+    <div id="glb-stage"></div>
+  </main>
 
   <footer>
     <div class="footer-content">
       <div id="clock" class="footer-clock">00:00:00</div>
-      <div id="scrolling-text" class="footer-text">WELCOME TO THE EXPERIMENTAL CANVAS</div>
+      <div id="scrolling-text" class="footer-text">
+        ROTATE THE LOGO WITH YOUR FINGERS
+      </div>
     </div>
     <button id="footerCloseButton">X</button>
   </footer>
 
+  <script type="module" src="experimental.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -760,6 +760,7 @@ body.menu-open footer {
   line-height: 20px; /* Match the original compact line-height */
   position: relative;
   padding-left: 4px;
+  color: black; /* Match scrolling text color used on other pages */
 }
 
 .footer-clock {
@@ -786,7 +787,7 @@ body.menu-open footer {
 .line {
   width: 30px;
   height: 3px;
-  background-color: white;
+  background-color: #D2F059;
   margin: 5px 0;
 }
 
@@ -1220,4 +1221,45 @@ body.menu-open .music-player__glass {
   .music-player__glass {
     gap: 1rem;
   }
+}
+
+/* Experimental page */
+body.experimental-full {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#glb-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+}
+
+.glb-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  touch-action: none;
+}
+
+.glb-item.is-dragging {
+  transform: scale(1.02);
+}
+
+.glb-item model-viewer {
+  width: 100%;
+  height: 240px;
+  background: transparent;
+  --poster-color: transparent;
 }
