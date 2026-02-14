@@ -781,23 +781,47 @@ body.menu-open footer {
 .hamburger-menu {
   display: none;
   cursor: pointer;
-  padding: 20px;
+  padding: 16px;
+  width: 56px;
+  height: 56px;
+  position: relative;
+  z-index: 3200;
+  transition: transform 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger-menu:active {
+  transform: scale(0.96);
 }
 
 .line {
-  width: 30px;
+  width: 32px;
   height: 3px;
   background-color: #D2F059;
-  margin: 5px 0;
+  margin: 0;
+  border-radius: 999px;
+  transition: transform 0.35s ease, opacity 0.3s ease, background-color 0.35s ease;
+  transform-origin: center;
 }
 
-.menu-close {
-  display: none;
-  background: transparent;
-  border: none;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
+body.menu-open .hamburger-menu .line {
+  background-color: #000;
+}
+
+body.menu-open .hamburger-menu .line:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+body.menu-open .hamburger-menu .line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.5);
+}
+
+body.menu-open .hamburger-menu .line:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
 }
 
 .horizontal-gallery {
@@ -905,14 +929,14 @@ body.menu-open footer {
   }
 }
 
-@media (max-width: 768px) {
-  .hamburger-menu {
-    display: block;
-    position: fixed;
-    top: 10px;
-    right: 0px;
-    z-index: 1001;
-  }
+  @media (max-width: 768px) {
+    .hamburger-menu {
+      display: flex;
+      position: fixed;
+      top: 10px;
+      right: 0px;
+      z-index: 3200;
+    }
 
   body.menu-open .lighting-launcher,
   body.menu-open .lighting-controls {
@@ -953,28 +977,6 @@ body.menu-open footer {
     padding: 10px 20px;
     display: block;
     text-align: center;
-  }
-
-  .menu-close {
-    display: block;
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    padding: 10px;
-    font-size: 28px;
-    line-height: 1;
-    color: #000;
-    z-index: 3100;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-    transition-delay: 0s;
-  }
-
-  nav ul.open + .menu-close {
-    opacity: 1;
-    pointer-events: auto;
-    transition-delay: 0.4s;
   }
 }
 

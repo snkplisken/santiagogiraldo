@@ -286,7 +286,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (navUl) {
         navUl.classList.remove('open');
     }
-    const closeMenuButton = pageHeader ? pageHeader.querySelector('.menu-close') : null;
 
     const applyMenuState = (isOpen) => {
         if (!navUl) {
@@ -302,17 +301,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (bodyElement) {
             bodyElement.classList.toggle('menu-open', isOpen);
         }
+
+        if (hamburgerMenu) {
+            hamburgerMenu.classList.toggle('is-active', isOpen);
+            hamburgerMenu.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
     };
 
     if (hamburgerMenu && navUl) {
         hamburgerMenu.addEventListener('click', function() {
             applyMenuState(!navUl.classList.contains('open'));
-        });
-    }
-
-    if (closeMenuButton && navUl) {
-        closeMenuButton.addEventListener('click', function() {
-            applyMenuState(false);
         });
     }
 
